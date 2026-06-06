@@ -13,7 +13,7 @@
             --card-bg: #ffffff;
             --text-dark: #1e293b;
             --text-light: #64748b;
-            --nav-bg: rgba(255, 255, 255, 0.95);
+            --nav-bg: rgba(255,255,255,0.95);
             --accent-new: #10b981;
             --border: #e2e8f0;
             --sidebar-w: 240px;
@@ -51,9 +51,12 @@
             color: var(--text-dark);
             cursor: pointer;
             white-space: nowrap;
-            text-decoration: none;
             margin-right: 8px;
             flex-shrink: 0;
+            border: none;
+            background: none;
+            font-family: 'Poppins', sans-serif;
+            padding: 0;
         }
         .brand-title:hover { color: var(--primary); }
 
@@ -64,8 +67,10 @@
             flex: 1;
         }
 
-        .header-nav a {
-            text-decoration: none;
+        .header-nav button {
+            background: none;
+            border: none;
+            font-family: 'Poppins', sans-serif;
             color: var(--text-light);
             font-weight: 500;
             padding: 7px 14px;
@@ -75,9 +80,10 @@
             cursor: pointer;
             white-space: nowrap;
         }
-        .header-nav a:hover { background: #f1f5f9; color: var(--text-dark); }
-        .header-nav a.active { background: var(--primary); color: white; }
+        .header-nav button:hover { background: #f1f5f9; color: var(--text-dark); }
+        .header-nav button.active { background: var(--primary); color: white; }
 
+        /* Search */
         .header-search-wrap {
             position: relative;
             margin-left: auto;
@@ -99,21 +105,19 @@
             outline: none;
             width: 220px;
             transition: border-color 0.2s, width 0.2s;
+            background: white;
+            color: var(--text-dark);
         }
         #header-search:focus { border-color: var(--primary); width: 280px; }
 
         /* ── PAGE SHELL ── */
-        .page-shell {
-            padding-top: var(--header-h);
-            min-height: 100vh;
-        }
-
-        /* pages */
+        .page-shell { padding-top: var(--header-h); min-height: 100vh; }
         .page { display: none; }
         .page.active { display: block; }
+        #page-browse.active { display: flex; }
 
-        /* ── HOME PAGE ── */
-        #page-home { max-width: 1200px; margin: 0 auto; padding: 40px 24px 60px; }
+        /* ── HOME ── */
+        .home-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 24px 60px; }
 
         .hero {
             background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
@@ -130,22 +134,11 @@
             right: 40px; bottom: 10px;
             font-size: 7rem;
             opacity: 0.12;
+            pointer-events: none;
         }
-        .hero h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0 0 10px;
-            line-height: 1.2;
-        }
-        .hero p {
-            font-size: 0.95rem;
-            opacity: 0.8;
-            margin: 0;
-            max-width: 500px;
-            line-height: 1.65;
-        }
+        .hero h1 { font-size: 2rem; font-weight: 700; margin: 0 0 10px; line-height: 1.2; }
+        .hero p  { font-size: 0.95rem; opacity: 0.8; margin: 0; max-width: 500px; line-height: 1.65; }
 
-        /* Section rows */
         .home-section { margin-bottom: 48px; }
 
         .section-row-header {
@@ -154,12 +147,8 @@
             justify-content: space-between;
             margin-bottom: 16px;
         }
-        .section-row-header h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--text-dark);
-        }
+        .section-row-header h2 { font-size: 1.3rem; font-weight: 700; margin: 0; color: var(--text-dark); }
+
         .view-all-btn {
             font-size: 0.82rem;
             font-weight: 600;
@@ -171,19 +160,15 @@
             background: #eff6ff;
             transition: all 0.18s;
             white-space: nowrap;
-            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
         }
         .view-all-btn:hover { background: #dbeafe; }
 
-        .game-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-
-        /* ── BROWSE GAMES PAGE ── */
+        /* ── BROWSE PAGE ── */
         #page-browse {
-            display: flex;
             min-height: calc(100vh - var(--header-h));
         }
 
-        /* Sidebar */
         .sidebar {
             width: var(--sidebar-w);
             flex-shrink: 0;
@@ -193,7 +178,7 @@
             overflow-y: auto;
             background: white;
             border-right: 1px solid var(--border);
-            padding: 24px 0 40px;
+            padding: 16px 0 40px;
             scrollbar-width: thin;
             scrollbar-color: #cbd5e1 transparent;
         }
@@ -206,7 +191,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 20px;
+            padding: 11px 20px;
             cursor: pointer;
             user-select: none;
             font-size: 0.85rem;
@@ -216,23 +201,19 @@
         }
         .filter-toggle:hover { background: #f8fafc; }
 
-        .filter-toggle-icon {
+        .filter-icon {
             width: 20px; height: 20px;
             border-radius: 5px;
             background: #f1f5f9;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: 1rem; font-weight: 700;
             color: var(--text-light);
-            transition: background 0.15s;
             flex-shrink: 0;
+            line-height: 1;
         }
-        .filter-toggle:hover .filter-toggle-icon { background: #e2e8f0; }
+        .filter-toggle:hover .filter-icon { background: #e2e8f0; }
 
-        .filter-body {
-            padding: 4px 20px 14px;
-            overflow: hidden;
-        }
+        .filter-body { padding: 2px 20px 12px; }
         .filter-body.collapsed { display: none; }
 
         .filter-option {
@@ -243,136 +224,87 @@
             font-size: 0.82rem;
             color: var(--text-light);
             cursor: pointer;
-            border-radius: 6px;
-            transition: color 0.15s;
         }
         .filter-option:hover { color: var(--text-dark); }
-        .filter-option input[type="checkbox"] {
-            accent-color: var(--primary);
-            width: 14px; height: 14px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .filter-option input[type="radio"] {
+        .filter-option input {
             accent-color: var(--primary);
             width: 14px; height: 14px;
             cursor: pointer;
             flex-shrink: 0;
         }
 
-        /* Date range inside filter */
         .filter-date-inputs { display: flex; flex-direction: column; gap: 6px; }
-        .filter-date-inputs label { font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
+        .filter-date-inputs label { font-size: 0.75rem; color: var(--text-light); font-weight: 500; display: flex; flex-direction: column; gap: 3px; }
         .filter-date-inputs input[type="date"] {
-            width: 100%;
-            padding: 6px 8px;
-            border-radius: 8px;
-            border: 1.5px solid var(--border);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.78rem;
-            outline: none;
+            width: 100%; padding: 6px 8px;
+            border-radius: 8px; border: 1.5px solid var(--border);
+            font-family: 'Poppins', sans-serif; font-size: 0.78rem; outline: none;
         }
         .filter-date-inputs input[type="date"]:focus { border-color: var(--primary); }
 
         .sidebar-clear-btn {
-            margin: 14px 20px 0;
+            margin: 12px 20px 0;
             width: calc(100% - 40px);
             padding: 7px;
             border-radius: 8px;
             border: 1.5px solid var(--border);
             background: white;
             font-family: 'Poppins', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.8rem; font-weight: 600;
             color: var(--text-light);
             cursor: pointer;
             transition: all 0.15s;
         }
         .sidebar-clear-btn:hover { border-color: #cbd5e1; color: var(--text-dark); background: #f8fafc; }
 
-        /* Browse main area */
-        .browse-main {
-            flex: 1;
-            min-width: 0;
-            padding: 32px 28px 60px;
-        }
+        .browse-main { flex: 1; min-width: 0; padding: 32px 28px 60px; }
 
-        .browse-header {
+        .browse-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             flex-wrap: wrap;
             gap: 12px;
         }
-        .browse-header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-        }
+        .browse-top h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
 
         .sort-wrap { display: flex; align-items: center; gap: 8px; }
         .sort-label { font-size: 0.82rem; color: var(--text-light); font-weight: 500; }
         #sort-select {
             padding: 7px 12px;
-            border-radius: 9px;
-            border: 1.5px solid var(--border);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.82rem;
-            color: var(--text-dark);
-            background: white;
-            cursor: pointer;
-            outline: none;
+            border-radius: 9px; border: 1.5px solid var(--border);
+            font-family: 'Poppins', sans-serif; font-size: 0.82rem;
+            color: var(--text-dark); background: white; cursor: pointer; outline: none;
         }
         #sort-select:focus { border-color: var(--primary); }
 
         .result-count { font-size: 0.82rem; color: var(--text-light); margin-bottom: 16px; }
 
-        /* ── COLLECTIONS PAGE ── */
-        #page-collections { max-width: 1200px; margin: 0 auto; padding: 40px 24px 60px; }
-        #page-collections h1 {
-            font-size: 1.5rem; font-weight: 700; margin: 0 0 8px;
-        }
-        #page-collections .page-subtitle {
-            font-size: 0.9rem; color: var(--text-light); margin-bottom: 36px;
-        }
-
-        .collection-section { margin-bottom: 44px; }
-        .collection-desc {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin: -8px 0 14px;
-            line-height: 1.55;
-        }
-
         /* ── ABOUT PAGE ── */
-        #page-about { max-width: 800px; margin: 0 auto; padding: 40px 24px 60px; }
-        #page-about .about-card {
-            background: white;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            line-height: 1.8;
+        .about-wrap { max-width: 800px; margin: 0 auto; padding: 40px 24px 60px; }
+        .about-card {
+            background: white; padding: 40px; border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); line-height: 1.8;
         }
-        #page-about h2 { color: var(--primary); margin-top: 0; }
+        .about-card h2 { color: var(--primary); margin-top: 0; }
+        .about-card p { color: var(--text-light); }
 
-        /* ── SEARCH RESULTS PAGE ── */
-        #page-search { max-width: 1200px; margin: 0 auto; padding: 40px 24px 60px; }
-        #page-search h1 { font-size: 1.5rem; font-weight: 700; margin: 0 0 6px; }
-        #page-search .result-count { font-size: 0.85rem; color: var(--text-light); margin-bottom: 20px; }
+        /* ── SEARCH PAGE ── */
+        .search-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 24px 60px; }
+        .search-wrap h1 { font-size: 1.5rem; font-weight: 700; margin: 0 0 6px; }
 
-        /* ── GAME CARDS (shared) ── */
+        /* ── GAME GRID & CARDS ── */
+        .game-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
         .game-card {
             background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
+            border-radius: 16px; overflow: hidden;
             box-shadow: 0 4px 12px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             border: 1px solid var(--border);
             transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s cubic-bezier(0.4,0,0.2,1);
-            position: relative;
-            cursor: pointer;
+            position: relative; cursor: pointer;
         }
         .game-card:hover {
             transform: translateY(-5px);
@@ -392,36 +324,54 @@
         .card-title { font-size: 1.05rem; font-weight: 700; margin: 0 0 8px; color: #0f172a; }
         .card-desc { font-size: 0.82rem; color: var(--text-light); margin: 0; flex-grow: 1; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
+        .empty-state { text-align: center; padding: 80px 20px; color: var(--text-light); grid-column: 1/-1; }
+        .empty-state p { margin: 8px 0 0; font-size: 0.88rem; }
+
         /* ── DETAIL MODAL ── */
-        #detail-view { display: none; position: fixed; top:0;left:0;width:100%;height:100%; background: rgba(15,23,42,0.8); z-index: 3000; overflow-y: auto; padding: 20px; }
-        .detail-container { max-width: 850px; margin: 20px auto; background: white; border-radius: 24px; overflow: hidden; position: relative; }
-        .close-detail-x { position: absolute; top: 15px; right: 15px; background: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 10; font-size: 1rem; }
+        #detail-view {
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15,23,42,0.8); z-index: 3000;
+            overflow-y: auto; padding: 20px;
+        }
+        .detail-container {
+            max-width: 850px; margin: 20px auto;
+            background: white; border-radius: 24px;
+            overflow: hidden; position: relative;
+        }
+        .close-detail-x {
+            position: absolute; top: 15px; right: 15px;
+            background: white; border: none;
+            width: 35px; height: 35px; border-radius: 50%;
+            cursor: pointer; font-size: 1rem; font-weight: bold; z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+        }
         .detail-hero { width: 100%; height: 300px; background-size: cover; background-position: center; background-color: #e2e8f0; }
         .detail-body { padding: 30px; display: grid; grid-template-columns: 1fr 200px; gap: 30px; }
-        .compat-section { margin-bottom: 20px; }
-        .compat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.05em; margin-bottom: 8px; display: block; }
-        .compat-badge { display: inline-block; padding: 4px 12px; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: var(--primary); margin-right: 6px; margin-bottom: 6px; }
-        .qr-area { text-align: center; border-left: 1px solid #f1f5f9; padding-left: 30px; }
-        .qr-code { width: 150px; height: 150px; border-radius: 10px; margin-bottom: 10px; }
+        .detail-body h2 { margin-top: 0; margin-bottom: 10px; }
         .creator-info { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
         .creator-avatar { width: 24px; height: 24px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; }
         .creator-name { font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
-        .play-btn { background: var(--primary); color: white; padding: 10px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; }
-
-        /* empty state */
-        .empty-state { text-align: center; padding: 80px 20px; color: var(--text-light); grid-column: 1/-1; }
-        .empty-state p { margin: 8px 0 0; font-size: 0.88rem; }
+        .compat-section { margin-bottom: 20px; }
+        .compat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.05em; margin-bottom: 8px; display: block; }
+        .compat-badge { display: inline-block; padding: 4px 12px; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: var(--primary); margin-right: 6px; margin-bottom: 6px; }
+        .detail-desc { line-height: 1.6; color: var(--text-light); margin-bottom: 25px; }
+        .play-btn { background: var(--primary); color: white; padding: 15px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; width: 100%; transition: background 0.2s; }
+        .play-btn:hover { background: var(--primary-hover); }
+        .qr-area { text-align: center; border-left: 1px solid #f1f5f9; padding-left: 30px; }
+        .qr-label { font-size: 0.8rem; font-weight: 600; margin-bottom: 10px; }
+        .qr-code { width: 150px; height: 150px; border-radius: 10px; margin-bottom: 10px; }
+        .qr-id { font-size: 0.7rem; color: var(--text-light); }
 
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
             .sidebar { display: none; }
-            #page-browse { flex-direction: column; }
             .browse-main { padding: 20px 16px 60px; }
             .hero { padding: 32px 24px; }
             .hero::after { display: none; }
-            #page-home, #page-collections, #page-about, #page-search { padding: 24px 16px 60px; }
-            #header-search { width: 160px; }
-            #header-search:focus { width: 200px; }
+            .home-wrap, .about-wrap, .search-wrap { padding: 24px 16px 60px; }
+            #header-search { width: 140px; }
+            #header-search:focus { width: 190px; }
         }
         @media (max-width: 500px) {
             .brand-title { font-size: 0.95rem; }
@@ -435,124 +385,110 @@
 
 <!-- HEADER -->
 <header>
-    <span class="brand-title" onclick="showPage('home')">🎮 AHS Game Library</span>
+    <button class="brand-title" onclick="showPage('home')">🎮 AHS Game Library</button>
     <nav class="header-nav">
-        <a id="nav-browse" onclick="showPage('browse')">Browse Games</a>
-        <a id="nav-collections" onclick="showPage('collections')">Browse Collections</a>
-        <a id="nav-about" onclick="showPage('about')">About</a>
+        <button id="nav-browse" onclick="showPage('browse')">Browse Games</button>
+        <button id="nav-about" onclick="showPage('about')">About</button>
     </nav>
     <div class="header-search-wrap">
         <svg class="header-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="header-search" placeholder="Search games…" oninput="handleHeaderSearch()">
+        <input type="text" id="header-search" placeholder="Search games…" autocomplete="off">
     </div>
 </header>
 
 <div class="page-shell">
 
-    <!-- ══ HOME PAGE ══ -->
+    <!-- HOME -->
     <div id="page-home" class="page active">
-        <div style="max-width:1200px;margin:0 auto;padding:40px 24px 60px;">
+        <div class="home-wrap">
             <div class="hero">
                 <h1>Games that make learning joyful 🎉</h1>
                 <p>Interactive educational games across Literacy, Numeracy, SEL, and Daily Living — designed for every student at Rainbow Centre Admiral Hill School.</p>
             </div>
-
-            <!-- Featured Games -->
             <div class="home-section">
                 <div class="section-row-header">
                     <h2>⭐ Featured Games</h2>
-                    <span class="view-all-btn" onclick="showPage('browse')">View All →</span>
+                    <button class="view-all-btn" onclick="showPage('browse')">View All →</button>
                 </div>
                 <div class="game-grid" id="home-featured"></div>
             </div>
-
-            <!-- Featured Collections -->
-            <div class="home-section">
-                <div class="section-row-header">
-                    <h2>🗂️ Featured Collections</h2>
-                    <span class="view-all-btn" onclick="showPage('collections')">View All →</span>
-                </div>
-                <div class="game-grid" id="home-collections-preview"></div>
-            </div>
-
-            <!-- Recently Added -->
             <div class="home-section">
                 <div class="section-row-header">
                     <h2>✨ Recently Added</h2>
-                    <span class="view-all-btn" onclick="showBrowseFiltered('recent')">View All →</span>
+                    <button class="view-all-btn" onclick="showBrowseRecent()">View All →</button>
                 </div>
                 <div class="game-grid" id="home-recent"></div>
             </div>
         </div>
     </div>
 
-    <!-- ══ BROWSE GAMES PAGE ══ -->
+    <!-- BROWSE GAMES -->
     <div id="page-browse" class="page">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="browse-sidebar">
+        <aside class="sidebar">
 
+            <!-- Category — open by default -->
             <div class="filter-group">
                 <div class="filter-toggle" onclick="toggleFilter('cat')">
                     <span>Category</span>
-                    <span class="filter-toggle-icon" id="cat-icon">−</span>
+                    <span class="filter-icon" id="icon-cat">−</span>
                 </div>
-                <div class="filter-body" id="cat-body">
-                    <label class="filter-option"><input type="radio" name="cat" value="" checked onchange="applyBrowseFilters()"> All</label>
-                    <label class="filter-option"><input type="radio" name="cat" value="Literacy" onchange="applyBrowseFilters()"> Literacy</label>
-                    <label class="filter-option"><input type="radio" name="cat" value="Numeracy" onchange="applyBrowseFilters()"> Numeracy</label>
-                    <label class="filter-option"><input type="radio" name="cat" value="SEL" onchange="applyBrowseFilters()"> SEL</label>
-                    <label class="filter-option"><input type="radio" name="cat" value="Daily Living" onchange="applyBrowseFilters()"> Daily Living</label>
-                    <label class="filter-option"><input type="radio" name="cat" value="General" onchange="applyBrowseFilters()"> General</label>
+                <div class="filter-body" id="body-cat">
+                    <label class="filter-option"><input type="radio" name="cat" value="" checked onchange="applyFilters()"> All</label>
+                    <label class="filter-option"><input type="radio" name="cat" value="Literacy" onchange="applyFilters()"> Literacy</label>
+                    <label class="filter-option"><input type="radio" name="cat" value="Numeracy" onchange="applyFilters()"> Numeracy</label>
+                    <label class="filter-option"><input type="radio" name="cat" value="SEL" onchange="applyFilters()"> SEL</label>
+                    <label class="filter-option"><input type="radio" name="cat" value="Daily Living" onchange="applyFilters()"> Daily Living</label>
+                    <label class="filter-option"><input type="radio" name="cat" value="General" onchange="applyFilters()"> General</label>
                 </div>
             </div>
 
+            <!-- Topics — closed by default -->
             <div class="filter-group">
                 <div class="filter-toggle" onclick="toggleFilter('topic')">
                     <span>Topics</span>
-                    <span class="filter-toggle-icon" id="topic-icon">−</span>
+                    <span class="filter-icon" id="icon-topic">+</span>
                 </div>
-                <div class="filter-body" id="topic-body">
-                    <div id="topic-options">
-                        <!-- populated by JS based on category selection -->
-                    </div>
+                <div class="filter-body collapsed" id="body-topic">
+                    <div id="topic-options"></div>
                 </div>
             </div>
 
+            <!-- Device — closed by default -->
             <div class="filter-group">
                 <div class="filter-toggle" onclick="toggleFilter('device')">
                     <span>Device Compatibility</span>
-                    <span class="filter-toggle-icon" id="device-icon">−</span>
+                    <span class="filter-icon" id="icon-device">+</span>
                 </div>
-                <div class="filter-body" id="device-body">
-                    <label class="filter-option"><input type="checkbox" value="desktop" onchange="applyBrowseFilters()"> Desktop</label>
-                    <label class="filter-option"><input type="checkbox" value="tablet" onchange="applyBrowseFilters()"> Tablet</label>
-                    <label class="filter-option"><input type="checkbox" value="mobile" onchange="applyBrowseFilters()"> Mobile</label>
+                <div class="filter-body collapsed" id="body-device">
+                    <label class="filter-option"><input type="checkbox" value="desktop" onchange="applyFilters()"> Desktop</label>
+                    <label class="filter-option"><input type="checkbox" value="tablet" onchange="applyFilters()"> Tablet</label>
+                    <label class="filter-option"><input type="checkbox" value="mobile" onchange="applyFilters()"> Mobile</label>
                 </div>
             </div>
 
+            <!-- Upload Date — closed by default -->
             <div class="filter-group">
                 <div class="filter-toggle" onclick="toggleFilter('date')">
                     <span>Upload Date</span>
-                    <span class="filter-toggle-icon" id="date-icon">+</span>
+                    <span class="filter-icon" id="icon-date">+</span>
                 </div>
-                <div class="filter-body collapsed" id="date-body">
+                <div class="filter-body collapsed" id="body-date">
                     <div class="filter-date-inputs">
-                        <label>From<input type="date" id="date-from" onchange="applyBrowseFilters()"></label>
-                        <label>To<input type="date" id="date-to" onchange="applyBrowseFilters()"></label>
+                        <label>From <input type="date" id="date-from" onchange="applyFilters()"></label>
+                        <label>To <input type="date" id="date-to" onchange="applyFilters()"></label>
                     </div>
                 </div>
             </div>
 
-            <button class="sidebar-clear-btn" onclick="clearBrowseFilters()">Clear Filters</button>
+            <button class="sidebar-clear-btn" onclick="clearFilters()">Clear Filters</button>
         </aside>
 
-        <!-- Browse Main -->
         <div class="browse-main">
-            <div class="browse-header">
+            <div class="browse-top">
                 <h1>Browse Games</h1>
                 <div class="sort-wrap">
                     <span class="sort-label">Sort by:</span>
-                    <select id="sort-select" onchange="applyBrowseFilters()">
+                    <select id="sort-select" onchange="applyFilters()">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
                         <option value="alpha">A → Z</option>
@@ -564,33 +500,30 @@
         </div>
     </div>
 
-    <!-- ══ COLLECTIONS PAGE ══ -->
-    <div id="page-collections" class="page">
-        <h1>Browse Collections</h1>
-        <p class="page-subtitle">Curated sets of games grouped by theme or learning goal.</p>
-        <div id="collections-list"></div>
-    </div>
-
-    <!-- ══ ABOUT PAGE ══ -->
+    <!-- ABOUT -->
     <div id="page-about" class="page">
-        <div class="about-card">
-            <h2>Welcome to AHS Game Library!</h2>
-            <p>AHS Game Library is a collection of educational games and interactive applications specially designed for students with autism.</p>
-            <p>The games and applications in this library were created by teachers from Rainbow Centre Admiral Hill School to support learning across four key domains: Literacy, Numeracy, Social Emotional Learning, and Daily Living. Each activity is thoughtfully designed to provide engaging, meaningful, and accessible learning experiences for students of different abilities.</p>
-            <p>Our goal is to make games more accessible for students with autism — not only as a learning tool, but also as a source of enjoyment, confidence, and independence. Through interactive and motivating activities, we hope to create opportunities for every student to learn, explore, and succeed at their own pace.</p>
-            <p>We also hope to support families by providing simple and meaningful resources that parents and caregivers can easily use at home to practise and reinforce skills together.</p>
-            <p>Above all, AHS Game Library is created with the belief that learning should be accessible, encouraging, and enjoyable for every child.</p>
+        <div class="about-wrap">
+            <div class="about-card">
+                <h2>Welcome to AHS Game Library!</h2>
+                <p>AHS Game Library is a collection of educational games and interactive applications specially designed for students with autism.</p>
+                <p>The games and applications in this library were created by teachers from Rainbow Centre Admiral Hill School to support learning across four key domains: Literacy, Numeracy, Social Emotional Learning, and Daily Living. Each activity is thoughtfully designed to provide engaging, meaningful, and accessible learning experiences for students of different abilities.</p>
+                <p>Our goal is to make games more accessible for students with autism — not only as a learning tool, but also as a source of enjoyment, confidence, and independence. Through interactive and motivating activities, we hope to create opportunities for every student to learn, explore, and succeed at their own pace.</p>
+                <p>We also hope to support families by providing simple and meaningful resources that parents and caregivers can easily use at home to practise and reinforce skills together.</p>
+                <p>Above all, AHS Game Library is created with the belief that learning should be accessible, encouraging, and enjoyable for every child.</p>
+            </div>
         </div>
     </div>
 
-    <!-- ══ SEARCH RESULTS PAGE ══ -->
+    <!-- SEARCH RESULTS -->
     <div id="page-search" class="page">
-        <h1 id="search-heading">Search Results</h1>
-        <div class="result-count" id="search-count"></div>
-        <div class="game-grid" id="search-grid"></div>
+        <div class="search-wrap">
+            <h1 id="search-heading">Search Results</h1>
+            <div class="result-count" id="search-count"></div>
+            <div class="game-grid" id="search-grid"></div>
+        </div>
     </div>
 
-</div><!-- /page-shell -->
+</div>
 
 <!-- DETAIL MODAL -->
 <div id="detail-view" onclick="handleBackdropClick(event)">
@@ -599,337 +532,237 @@
         <div id="detail-img" class="detail-hero"></div>
         <div class="detail-body">
             <div>
-                <h2 id="detail-title" style="margin-top:0;margin-bottom:10px;"></h2>
-                <div id="detail-creator-row" class="creator-info" style="margin-bottom:20px;"></div>
+                <h2 id="detail-title"></h2>
+                <div id="detail-creator" class="creator-info"></div>
                 <div class="compat-section">
                     <span class="compat-label">Device Compatibility</span>
                     <div id="detail-compat"></div>
                 </div>
-                <p id="detail-desc" style="line-height:1.6;color:var(--text-light);margin-bottom:25px;"></p>
-                <button id="detail-play-btn" class="play-btn" style="width:100%;padding:15px;font-size:1rem;">Play Game</button>
+                <p id="detail-desc" class="detail-desc"></p>
+                <button id="detail-play-btn" class="play-btn">Play Game</button>
             </div>
             <div class="qr-area">
-                <p style="font-size:0.8rem;font-weight:600;margin-bottom:10px;">Open on Tablet</p>
-                <img id="detail-qr" src="" class="qr-code">
-                <p id="detail-id-label" style="font-size:0.7rem;color:var(--text-light);"></p>
+                <p class="qr-label">Open on Tablet</p>
+                <img id="detail-qr" src="" class="qr-code" alt="QR Code">
+                <p id="detail-id" class="qr-id"></p>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-/* ══════════════════════════════════════════
-   DATA & CONSTANTS
-══════════════════════════════════════════ */
-
+/* ── TOPICS MAP ── */
 const TOPICS = {
-    Numeracy:       { 'Numbers':['numbers','counting','number comparison','more','less'], 'Operations':['addition','subtraction','multiplicaton','division','operations'], 'Money':['money','purchasing','dollar','cents','buy','exact combination'], 'Time':['days of the week','months of the year','date','week','calendar','time'], 'Measurement':['measurement','length','weight','capacity'], 'Geometry':['shapes','lines','geometry','tracing'], 'Data Analysis':['data','graph','tally'] },
-    Literacy:       { 'Letters':['letters','alphabet','case','uppercase','lowercase'], 'Reading':['reading','sight words','phonics','letter sounds'], 'Vocabulary':['vocabulary','body parts','attributes'], 'Comprehension':['comprehension','questions','WH questions','story','sequencing'], 'Writing':['writing','typing','sentence building'] },
-    'Daily Living': { 'Self Care':['self care','self-care','toileting','toilet','handwashing','showering','grooming'], 'Home Living':['home living','food safety','laundry','food preparation'], 'Health and Safety':['safety','road crossing','health'], 'Leisure':['leisure','play'], 'Community Living':['community living','mobility'] },
+    Numeracy:       { Numbers:['numbers','counting','number comparison','more','less'], Operations:['addition','subtraction','multiplicaton','division','operations'], Money:['money','purchasing','dollar','cents','buy','exact combination'], Time:['days of the week','months of the year','date','week','calendar','time'], Measurement:['measurement','length','weight','capacity'], Geometry:['shapes','lines','geometry','tracing'], 'Data Analysis':['data','graph','tally'] },
+    Literacy:       { Letters:['letters','alphabet','case','uppercase','lowercase'], Reading:['reading','sight words','phonics','letter sounds'], Vocabulary:['vocabulary','body parts','attributes'], Comprehension:['comprehension','questions','WH questions','story','sequencing'], Writing:['writing','typing','sentence building'] },
+    'Daily Living': { 'Self Care':['self care','self-care','toileting','toilet','handwashing','showering','grooming'], 'Home Living':['home living','food safety','laundry','food preparation'], 'Health and Safety':['safety','road crossing','health'], Leisure:['leisure','play'], 'Community Living':['community living','mobility'] },
     SEL:            { 'Self Awareness':['self awareness','emotions','regulation'], 'Social Awareness':['social awareness','public and private places','public and private behaviours','social skills','friendship'], 'Decision Making':['decision making'] },
-    General:        { 'Creative':['creative','art'], 'Sensory':['sensory'], 'Tools':['tool'] }
+    General:        { Creative:['creative','art'], Sensory:['sensory'], Tools:['tool'] }
 };
 
-// Collections definition — tags-based, editable
-const COLLECTIONS = [
-    { id:'life-skills',   title:'Life Skills',           emoji:'🏠', desc:'Games focused on everyday independence — hygiene, safety, home tasks, and community navigation.', tags:['self care','self-care','handwashing','toileting','showering','laundry','food safety','food preparation','road crossing','community living','mobility'] },
-    { id:'emotions',      title:'Feelings & Emotions',   emoji:'💛', desc:'Explore emotions, self-regulation, and social awareness through interactive play.', tags:['emotions','regulation','self awareness','social awareness','friendship','social skills'] },
-    { id:'numbers',       title:'Numbers & Counting',    emoji:'🔢', desc:'Build foundational number sense through counting, comparison, and early operations.', tags:['numbers','counting','number comparison','more','less','addition','subtraction'] },
-    { id:'reading',       title:'Reading & Phonics',     emoji:'📖', desc:'Develop letter recognition, phonics, sight words, and early reading comprehension.', tags:['letters','alphabet','reading','sight words','phonics','letter sounds','comprehension'] },
-    { id:'money',         title:'Money & Shopping',      emoji:'💰', desc:'Practice using money, making purchases, and understanding value.', tags:['money','purchasing','dollar','cents','buy','exact combination'] },
-    { id:'creative',      title:'Creative & Sensory',    emoji:'🎨', desc:'Open-ended creative and sensory experiences for exploration and expression.', tags:['creative','art','sensory'] },
-    { id:'time',          title:'Time & Calendar',       emoji:'📅', desc:'Learn days of the week, months, dates, and telling time.', tags:['days of the week','months of the year','date','week','calendar','time'] },
-];
-
-const HOME_FEATURED_COUNT    = 4;
-const HOME_COLLECTIONS_COUNT = 4;
-const HOME_RECENT_COUNT      = 4;
-const COLLECTION_PREVIEW_COUNT = 4;
+const HOME_FEATURED_COUNT = 4;
+const HOME_RECENT_COUNT   = 4;
 
 let allGames = [];
 const avatarSvg = `<div class="creator-avatar"><svg width="12" height="12" viewBox="0 0 24 24" fill="#94a3b8"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>`;
 
+/* ── HELPERS ── */
 function getGameUrl(g)       { return g.url || `./${g.category}/${g.id}/`; }
-function getGameThumbnail(g) { return g.thumbnail || `./${g.category}/${g.id}/preview.png`; }
-function checkIsNew(d)       { if (!d) return false; const diff = (new Date() - new Date(d)) / 86400000; return diff >= 0 && diff <= 30; }
+function getGameThumb(g)     { return g.thumbnail || `./${g.category}/${g.id}/preview.png`; }
+function isNew(g)            { if (!g.uploadDate) return false; return (Date.now() - new Date(g.uploadDate)) / 86400000 <= 30; }
 
-function getTopicsForGame(g) {
+function getTopics(g) {
     const ct = TOPICS[g.category]; if (!ct) return [];
-    const tags = (g.tags||[]).map(t=>t.toLowerCase());
-    return Object.entries(ct).filter(([,kws])=>kws.some(kw=>tags.some(t=>t.includes(kw)||kw.includes(t)))).map(([t])=>t);
+    const tags = (g.tags || []).map(t => t.toLowerCase());
+    return Object.entries(ct)
+        .filter(([, kws]) => kws.some(kw => tags.some(t => t.includes(kw) || kw.includes(t))))
+        .map(([t]) => t);
 }
 
-function gameMatchesCollection(g, col) {
-    const tags = (g.tags||[]).map(t=>t.toLowerCase());
-    return col.tags.some(ct => tags.some(t => t.includes(ct) || ct.includes(t)));
-}
-
-/* ══════════════════════════════════════════
-   INIT
-══════════════════════════════════════════ */
+/* ── INIT ── */
 async function init() {
     try {
         const res = await fetch('games.json?v=' + Date.now());
         allGames = await res.json();
-        allGames.forEach(g => { g._topics = getTopicsForGame(g); });
-        allGames.sort((a,b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+        allGames.forEach(g => { g._topics = getTopics(g); });
+        allGames.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
     } catch(e) { console.error('Could not load games.json'); }
     renderHome();
-    renderCollections();
-    populateTopicOptions();
-    applyBrowseFilters();
+    populateTopicOptions(null);
+    applyFilters();
 }
 
-/* ══════════════════════════════════════════
-   PAGE ROUTING
-══════════════════════════════════════════ */
+/* ── PAGE ROUTING ── */
 function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-'+name).classList.add('active');
-    document.querySelectorAll('.header-nav a').forEach(a => a.classList.remove('active'));
-    const navEl = document.getElementById('nav-'+name);
-    if (navEl) navEl.classList.add('active');
-    document.getElementById('header-search').value = '';
-    window.scrollTo(0,0);
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.header-nav button').forEach(b => b.classList.remove('active'));
+    const nb = document.getElementById('nav-' + name);
+    if (nb) nb.classList.add('active');
+    window.scrollTo(0, 0);
 }
 
-function showBrowseFiltered(preset) {
-    clearBrowseFilters();
-    if (preset === 'recent') {
-        // date-from = 30 days ago
-        const d = new Date(); d.setDate(d.getDate()-30);
-        document.getElementById('date-from').value = d.toISOString().split('T')[0];
-        // expand date filter
-        const body = document.getElementById('date-body');
-        body.classList.remove('collapsed');
-        document.getElementById('date-icon').textContent = '−';
-    }
+function showBrowseRecent() {
+    clearFilters();
+    const d = new Date(); d.setDate(d.getDate() - 30);
+    document.getElementById('date-from').value = d.toISOString().split('T')[0];
+    // open date filter
+    const body = document.getElementById('body-date');
+    body.classList.remove('collapsed');
+    document.getElementById('icon-date').textContent = '−';
     showPage('browse');
-    applyBrowseFilters();
+    applyFilters();
 }
 
-function showCollectionAll(colId) {
-    const col = COLLECTIONS.find(c=>c.id===colId);
-    if (!col) return;
-    clearBrowseFilters();
-    // We'll filter by collection tag via a temporary state
-    window._activeCollection = colId;
-    showPage('browse');
-    applyBrowseFilters();
-    document.querySelector('#page-browse .browse-header h1').textContent = `${col.emoji} ${col.title}`;
-}
-
-/* ══════════════════════════════════════════
-   HOME
-══════════════════════════════════════════ */
+/* ── HOME ── */
 function renderHome() {
-    // Featured: pick newest games spread across categories
-    const byCategory = {};
-    allGames.forEach(g => { if(!byCategory[g.category]) byCategory[g.category]=g; });
-    const featured = Object.values(byCategory).slice(0, HOME_FEATURED_COUNT);
+    // Featured: one per category, newest
+    const seen = {};
+    const featured = allGames.filter(g => { if (!seen[g.category]) { seen[g.category] = true; return true; } return false; }).slice(0, HOME_FEATURED_COUNT);
     renderGrid('home-featured', featured);
 
-    // Collections preview: show first game from each of first N collections
-    const colPreviews = [];
-    for (const col of COLLECTIONS.slice(0, HOME_COLLECTIONS_COUNT)) {
-        const match = allGames.find(g => gameMatchesCollection(g, col));
-        if (match) colPreviews.push({ ...match, _collectionId: col.id, _collectionEmoji: col.emoji, _collectionTitle: col.title });
-    }
-    renderGrid('home-collections-preview', colPreviews, { asCollection: true });
-
     // Recent
-    const recent = allGames.filter(g => checkIsNew(g.uploadDate)).slice(0, HOME_RECENT_COUNT);
+    const recent = allGames.filter(g => isNew(g)).slice(0, HOME_RECENT_COUNT);
     renderGrid('home-recent', recent.length ? recent : allGames.slice(0, HOME_RECENT_COUNT));
 }
 
-/* ══════════════════════════════════════════
-   COLLECTIONS
-══════════════════════════════════════════ */
-function renderCollections() {
-    const container = document.getElementById('collections-list');
-    container.innerHTML = COLLECTIONS.map(col => {
-        const games = allGames.filter(g => gameMatchesCollection(g, col));
-        const preview = games.slice(0, COLLECTION_PREVIEW_COUNT);
-        if (preview.length === 0) return '';
-        return `
-            <div class="collection-section">
-                <div class="section-row-header">
-                    <h2>${col.emoji} ${col.title}</h2>
-                    <span class="view-all-btn" onclick="showCollectionAll('${col.id}')">View All (${games.length}) →</span>
-                </div>
-                <p class="collection-desc">${col.desc}</p>
-                <div class="game-grid">${preview.map(createCard).join('')}</div>
-            </div>`;
-    }).join('');
-}
-
-/* ══════════════════════════════════════════
-   BROWSE FILTERS
-══════════════════════════════════════════ */
+/* ── FILTER TOGGLE ── */
 function toggleFilter(key) {
-    const body = document.getElementById(key+'-body');
-    const icon = document.getElementById(key+'-icon');
-    const collapsed = body.classList.toggle('collapsed');
-    icon.textContent = collapsed ? '+' : '−';
+    const body = document.getElementById('body-' + key);
+    const icon = document.getElementById('icon-' + key);
+    const closing = !body.classList.contains('collapsed');
+    body.classList.toggle('collapsed', closing);
+    icon.textContent = closing ? '+' : '−';
 }
 
+/* ── TOPIC OPTIONS ── */
 function populateTopicOptions(category) {
     const container = document.getElementById('topic-options');
-    let topics = [];
-    if (category && TOPICS[category]) {
-        topics = Object.keys(TOPICS[category]);
-    } else {
-        // all topics
-        Object.values(TOPICS).forEach(t => topics.push(...Object.keys(t)));
-        topics = [...new Set(topics)].sort();
-    }
+    let topics = category && TOPICS[category]
+        ? Object.keys(TOPICS[category])
+        : [...new Set(Object.values(TOPICS).flatMap(t => Object.keys(t)))].sort();
     container.innerHTML = topics.map(t =>
-        `<label class="filter-option"><input type="checkbox" value="${t}" onchange="applyBrowseFilters()"> ${t}</label>`
+        `<label class="filter-option"><input type="checkbox" value="${t}" onchange="applyFilters()"> ${t}</label>`
     ).join('');
 }
 
-function applyBrowseFilters() {
-    window._activeCollection = window._activeCollection || null;
+/* ── BROWSE FILTERS ── */
+function applyFilters() {
     const category = document.querySelector('input[name="cat"]:checked')?.value || '';
-    const checkedTopics = [...document.querySelectorAll('#topic-body input:checked')].map(i=>i.value);
-    const checkedDevices = [...document.querySelectorAll('#device-body input:checked')].map(i=>i.value);
+    const checkedTopics = [...document.querySelectorAll('#body-topic input:checked')].map(i => i.value);
+    const checkedDevices = [...document.querySelectorAll('#body-device input:checked')].map(i => i.value);
     const dateFrom = document.getElementById('date-from').value;
     const dateTo   = document.getElementById('date-to').value;
     const sort     = document.getElementById('sort-select').value;
 
-    // Update topic options when category changes
+    // Rebuild topic options for selected category, preserving selections
     populateTopicOptions(category || null);
-    // Re-check previously selected topics that still exist
     checkedTopics.forEach(t => {
-        const el = document.querySelector(`#topic-body input[value="${CSS.escape(t)}"]`);
+        const el = document.querySelector(`#body-topic input[value="${CSS.escape(t)}"]`);
         if (el) el.checked = true;
     });
 
     let list = [...allGames];
-
-    if (window._activeCollection) {
-        const col = COLLECTIONS.find(c=>c.id===window._activeCollection);
-        if (col) list = list.filter(g => gameMatchesCollection(g, col));
-        window._activeCollection = null;
-    }
-
     if (category) list = list.filter(g => g.category === category);
 
-    const activeTopic = [...document.querySelectorAll('#topic-body input:checked')].map(i=>i.value);
-    if (activeTopic.length) list = list.filter(g => activeTopic.some(t => (g._topics||[]).includes(t)));
-    if (checkedDevices.length) list = list.filter(g => checkedDevices.some(d => (g.compatibility||[]).includes(d)));
+    const activeTopics = [...document.querySelectorAll('#body-topic input:checked')].map(i => i.value);
+    if (activeTopics.length) list = list.filter(g => activeTopics.some(t => g._topics.includes(t)));
+    if (checkedDevices.length) list = list.filter(g => checkedDevices.some(d => (g.compatibility || []).includes(d)));
     if (dateFrom) list = list.filter(g => g.uploadDate && new Date(g.uploadDate) >= new Date(dateFrom));
     if (dateTo)   list = list.filter(g => g.uploadDate && new Date(g.uploadDate) <= new Date(dateTo));
 
-    if (sort==='newest') list.sort((a,b)=>new Date(b.uploadDate)-new Date(a.uploadDate));
-    else if (sort==='oldest') list.sort((a,b)=>new Date(a.uploadDate)-new Date(b.uploadDate));
-    else if (sort==='alpha') list.sort((a,b)=>a.title.localeCompare(b.title));
+    if (sort === 'newest') list.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+    else if (sort === 'oldest') list.sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate));
+    else list.sort((a, b) => a.title.localeCompare(b.title));
 
-    document.getElementById('browse-count').textContent = `${list.length} game${list.length!==1?'s':''}`;
+    document.getElementById('browse-count').textContent = `${list.length} game${list.length !== 1 ? 's' : ''}`;
     renderGrid('browse-grid', list);
 }
 
-function clearBrowseFilters() {
+function clearFilters() {
     document.querySelectorAll('input[name="cat"]')[0].checked = true;
-    document.querySelectorAll('#topic-body input, #device-body input').forEach(i=>i.checked=false);
+    document.querySelectorAll('#body-topic input, #body-device input').forEach(i => i.checked = false);
     document.getElementById('date-from').value = '';
     document.getElementById('date-to').value   = '';
     document.getElementById('sort-select').value = 'newest';
-    window._activeCollection = null;
-    document.querySelector('#page-browse .browse-header h1').textContent = 'Browse Games';
-    populateTopicOptions();
-    applyBrowseFilters();
+    populateTopicOptions(null);
+    applyFilters();
 }
 
-/* ══════════════════════════════════════════
-   SEARCH
-══════════════════════════════════════════ */
-function handleHeaderSearch() {
-    const q = document.getElementById('header-search').value.toLowerCase().trim();
+/* ── SEARCH ── */
+document.getElementById('header-search').addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
     if (!q) return;
     const results = allGames.filter(g =>
-        (g.title||'').toLowerCase().includes(q) ||
-        (g.description||'').toLowerCase().includes(q) ||
-        (g.category||'').toLowerCase().includes(q) ||
-        (g.creatorName||'').toLowerCase().includes(q) ||
-        (g.tags||[]).some(t=>t.toLowerCase().includes(q)) ||
-        (g.compatibility||[]).some(c=>c.toLowerCase().includes(q))
+        (g.title || '').toLowerCase().includes(q) ||
+        (g.description || '').toLowerCase().includes(q) ||
+        (g.category || '').toLowerCase().includes(q) ||
+        (g.creatorName || '').toLowerCase().includes(q) ||
+        (g.tags || []).some(t => t.toLowerCase().includes(q)) ||
+        (g.compatibility || []).some(c => c.toLowerCase().includes(q))
     );
-    document.getElementById('search-heading').textContent = `Results for "${document.getElementById('header-search').value.trim()}"`;
-    document.getElementById('search-count').textContent = `${results.length} game${results.length!==1?'s':''}`;
+    document.getElementById('search-heading').textContent = `Results for "${this.value.trim()}"`;
+    document.getElementById('search-count').textContent = `${results.length} game${results.length !== 1 ? 's' : ''}`;
     renderGrid('search-grid', results);
     showPage('search');
-}
+});
 
-/* ══════════════════════════════════════════
-   RENDERING
-══════════════════════════════════════════ */
-function renderGrid(containerId, games, opts={}) {
-    const el = document.getElementById(containerId);
+/* ── RENDER ── */
+function renderGrid(id, games) {
+    const el = document.getElementById(id);
     if (!games.length) {
         el.innerHTML = '<div class="empty-state"><p>No games found.</p></div>';
         return;
     }
-    el.innerHTML = games.map(g => createCard(g, opts)).join('');
+    el.innerHTML = games.map(createCard).join('');
 }
 
-function createCard(game, opts={}) {
-    const isNew = checkIsNew(game.uploadDate);
-    const newBadge = isNew ? `<div class="badge-new">NEW</div>` : '';
-    const title = opts.asCollection
-        ? `${game._collectionEmoji || ''} ${game._collectionTitle || game.title}`
-        : game.title;
-    const onclick = opts.asCollection
-        ? `showCollectionAll('${game._collectionId}')`
-        : `openDetails('${game.id}')`;
-    return `
-        <div class="game-card" onclick="${onclick}">
-            ${newBadge}
-            <div class="snapshot" style="background-image:url('${getGameThumbnail(game)}')"></div>
-            <div class="card-content">
-                <h3 class="card-title">${title}</h3>
-                <p class="card-desc">${game.description}</p>
-            </div>
-        </div>`;
+function createCard(g) {
+    const newBadge = isNew(g) ? '<div class="badge-new">NEW</div>' : '';
+    return `<div class="game-card" onclick="openDetails('${g.id}')">
+        ${newBadge}
+        <div class="snapshot" style="background-image:url('${getGameThumb(g)}')"></div>
+        <div class="card-content">
+            <h3 class="card-title">${g.title}</h3>
+            <p class="card-desc">${g.description}</p>
+        </div>
+    </div>`;
 }
 
-/* ══════════════════════════════════════════
-   DETAIL MODAL
-══════════════════════════════════════════ */
+/* ── DETAIL MODAL ── */
 function openDetails(id) {
-    const g = allGames.find(x=>x.id===id);
-    const absoluteUrl = new URL(getGameUrl(g), window.location.href).href;
-    document.getElementById('detail-title').innerText  = g.title;
-    document.getElementById('detail-desc').innerText   = g.description;
-    document.getElementById('detail-img').style.backgroundImage = `url('${getGameThumbnail(g)}')`;
-    document.getElementById('detail-creator-row').innerHTML = `${avatarSvg}<span class="creator-name">Created by <b>${g.creatorName||'Instructor'}</b></span>`;
-    document.getElementById('detail-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(absoluteUrl)}`;
-    document.getElementById('detail-id-label').innerText = `ID: ${id}`;
+    const g = allGames.find(x => x.id === id);
+    const absUrl = new URL(getGameUrl(g), window.location.href).href;
+    document.getElementById('detail-title').textContent = g.title;
+    document.getElementById('detail-desc').textContent = g.description;
+    document.getElementById('detail-img').style.backgroundImage = `url('${getGameThumb(g)}')`;
+    document.getElementById('detail-creator').innerHTML = `${avatarSvg}<span class="creator-name">Created by <b>${g.creatorName || 'Instructor'}</b></span>`;
     document.getElementById('detail-compat').innerHTML = g.compatibility
-        ? g.compatibility.map(c=>`<span class="compat-badge">${c}</span>`).join('')
+        ? g.compatibility.map(c => `<span class="compat-badge">${c}</span>`).join('')
         : '<span class="compat-badge">Universal</span>';
+    document.getElementById('detail-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(absUrl)}`;
+    document.getElementById('detail-id').textContent = `ID: ${id}`;
     document.getElementById('detail-play-btn').onclick = () => validateAndPlay(id);
     document.getElementById('detail-view').style.display = 'block';
     document.body.style.overflow = 'hidden';
 }
 
-function closeDetails() { document.getElementById('detail-view').style.display='none'; document.body.style.overflow='auto'; }
-function handleBackdropClick(e) { if (e.target.id==='detail-view') closeDetails(); }
+function closeDetails() {
+    document.getElementById('detail-view').style.display = 'none';
+    document.body.style.overflow = '';
+}
+function handleBackdropClick(e) { if (e.target.id === 'detail-view') closeDetails(); }
 
 function validateAndPlay(id) {
-    const g = allGames.find(x=>x.id===id);
+    const g = allGames.find(x => x.id === id);
     const ua = navigator.userAgent;
-    const isTablet = /Macintosh/i.test(ua) && navigator.maxTouchPoints>1 || /Tablet|iPad/i.test(ua);
-    const device = isTablet ? 'tablet' : (/Mobile/.test(ua) ? 'mobile' : 'desktop');
-    const ok = g.compatibility ? g.compatibility.includes(device) : true;
-    if (!ok) { if (confirm(`This game is optimized for ${g.compatibility.join('/')}. Continue?`)) playGame(id); }
-    else playGame(id);
-}
-
-function playGame(id) {
-    const g = allGames.find(x=>x.id===id);
-    const url = new URL(getGameUrl(g), window.location.href).href;
-    const a = document.createElement('a'); a.href=url; a.target='_blank'; a.rel='noopener noreferrer';
+    const isTablet = (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1) || /iPad/i.test(ua);
+    const device = isTablet ? 'tablet' : (/Mobile/i.test(ua) ? 'mobile' : 'desktop');
+    const ok = !g.compatibility || g.compatibility.includes(device);
+    if (!ok && !confirm(`This game is optimised for ${g.compatibility.join('/')}. Open anyway?`)) return;
+    const a = document.createElement('a');
+    a.href = new URL(getGameUrl(g), window.location.href).href;
+    a.target = '_blank'; a.rel = 'noopener noreferrer';
     document.body.appendChild(a); a.click(); a.remove();
 }
 
