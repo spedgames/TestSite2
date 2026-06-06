@@ -955,7 +955,7 @@
                     </div>
                     <div class="form-row">
                         <label class="form-label">Your Name <span>*</span></label>
-                        <input type="text" class="form-input" id="sg-creator" placeholder="e.g. Peter Tan">
+                        <input type="text" class="form-input" id="sg-creator" placeholder="e.g. Ms. Tan">
                     </div>
                     <div class="form-row">
                         <label class="form-label">Your Email <span>*</span></label>
@@ -967,18 +967,12 @@
                     </div>
                     <div class="form-row">
                         <label class="form-label">Learning Objectives <span>*</span></label>
-                        <textarea class="form-textarea" id="sg-objectives" placeholder="What ELOs or skills does this game target?"></textarea>
+                        <textarea class="form-textarea" id="sg-objectives" placeholder="What skills or concepts does this game help students practise?"></textarea>
                     </div>
                     <div class="form-row">
                         <label class="form-label">Link to Game File <span>*</span></label>
                         <input type="url" class="form-input" id="sg-file-link" placeholder="e.g. https://drive.google.com/… or https://codepen.io/…">
-                        <p style="font-size:0.78rem;color:var(--text-light);margin:5px 0 0;line-height:1.5;">Share a link to your HTML file on Google Drive or Codepen. If your game has an assets folder, share that too!</p>
-                    </div>
-                    <div class="form-row">
-                        <label class="form-check-label">
-                            <input type="checkbox" id="sg-assets">
-                            This game references external assets (images, audio, fonts) that are not embedded in the HTML file.
-                        </label>
+                        <p style="font-size:0.78rem;color:var(--text-light);margin:5px 0 0;line-height:1.5;">Share a link to your HTML file. We recommend uploading to <a href="https://drive.google.com" target="_blank" style="color:var(--primary);">Google Drive</a> (set sharing to "Anyone with the link") or hosting on <a href="https://codepen.io" target="_blank" style="color:var(--primary);">CodePen</a>.</p>
                     </div>
                     <button class="form-submit-btn" data-label="Submit Game" onclick="submitGame()">Submit Game</button>
                     <div class="form-status" id="sg-status"></div>
@@ -1492,10 +1486,9 @@ async function submitGame() {
     const fileLink = document.getElementById('sg-file-link').value.trim();
     if (!fileLink) { showStatus('sg-status', 'error', 'Please provide a link to the game file.'); return; }
 
-    const hasAssets = document.getElementById('sg-assets').checked ? 'Yes' : 'No';
-
     const ok = await postToFormspree(FORMSPREE_CONTRIBUTE, {
         _subject:            'New Game Submission: ' + document.getElementById('sg-title').value.trim(),
+        _replyto:            document.getElementById('sg-email').value.trim(),
         type:                'Game Submission',
         game_title:          document.getElementById('sg-title').value.trim(),
         creator_name:        document.getElementById('sg-creator').value.trim(),
@@ -1503,12 +1496,10 @@ async function submitGame() {
         description:         document.getElementById('sg-desc').value.trim(),
         learning_objectives: document.getElementById('sg-objectives').value.trim(),
         game_file_link:      fileLink,
-        has_external_assets: hasAssets,
     }, 'sg-status', document.querySelector('#tab-submit-game .form-submit-btn'));
 
     if (ok) {
         ['sg-title','sg-creator','sg-email','sg-desc','sg-objectives','sg-file-link'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('sg-assets').checked = false;
     }
 }
 
@@ -1516,14 +1507,16 @@ async function submitSuggestion() {
     const idea = document.getElementById('ss-idea').value.trim();
     if (!idea) { showStatus('ss-status', 'error', 'Please describe your game idea or learning objective.'); return; }
 
-    const ok = await postToFormspree(FORMSPREE_CONTRIBUTE, {
-        _subject:     'Game Suggestion',
-        type:         'Game Suggestion',
-        name:         document.getElementById('ss-name').value.trim() || 'Anonymous',
-        email:        document.getElementById('ss-email').value.trim() || '(not provided)',
-        idea:         idea,
-    }, 'ss-status', document.querySelector('#tab-suggest-game .form-submit-btn'));
+    const email = document.getElementById('ss-email').value.trim();
+    const payload = {
+        _subject: 'Game Suggestion',
+        type:     'Game Suggestion',
+        name:     document.getElementById('ss-name').value.trim() || 'Anonymous',
+        idea:     idea,
+    };
+    if (email) payload._replyto = email;
 
+    const ok = await postToFormspree(FORMSPREE_CONTRIBUTE, payload, 'ss-status', document.querySelector('#tab-suggest-game .form-submit-btn'));
     if (ok) {
         ['ss-name','ss-email','ss-idea'].forEach(id => document.getElementById(id).value = '');
     }
@@ -1535,15 +1528,17 @@ async function submitFeedback() {
 
     const typeBtn = document.querySelector('.feedback-type-btn.active');
     const type    = typeBtn ? typeBtn.textContent.trim() : 'General Feedback';
+    const email   = document.getElementById('fb-email').value.trim();
 
-    const ok = await postToFormspree(FORMSPREE_FEEDBACK, {
+    const payload = {
         _subject:      type,
         feedback_type: type,
         name:          document.getElementById('fb-name').value.trim() || 'Anonymous',
-        email:         document.getElementById('fb-email').value.trim() || '(not provided)',
         message:       message,
-    }, 'fb-status', document.querySelector('#page-feedback .form-submit-btn'));
+    };
+    if (email) payload._replyto = email;
 
+    const ok = await postToFormspree(FORMSPREE_FEEDBACK, payload, 'fb-status', document.querySelector('#page-feedback .form-submit-btn'));
     if (ok) {
         ['fb-name','fb-email','fb-message'].forEach(id => document.getElementById(id).value = '');
         document.querySelectorAll('.feedback-type-btn').forEach((b,i) => b.classList.toggle('active', i===0));
