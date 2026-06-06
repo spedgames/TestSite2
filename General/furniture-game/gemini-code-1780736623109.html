@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D Room Decorator</title>
+    <style>
+        :root {
+            --bg-color: #1a1a24;
+            --panel-color: #242432;
+            --accent-color: #6366f1;
+            --text-color: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Responsive UI Overlay */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .interactive {
+            pointer-events: auto;
+        }
+
+        header {
+            background: var(--panel-color);
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            align-self: flex-start;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Action Menu for Placement Control */
+        #action-menu {
+            display: flex;
+            gap: 12px;
+            align-self: center;
+            background: var(--panel-color);
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: transform 0.3s workflows, opacity 0.3s;
+        }
+
+        #action-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Catalog Shelf at Bottom */
+        #catalog {
+            background: var(--panel-color);
+            width: 100%;
+            max-width: 600px;
+            align-self: center;
+            padding: 16px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+        }
+
+        .catalog-item {
+            background: #2e2e42;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 12px;
+            min-width: 90px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .catalog-item:hover {
+            border-color: var(--accent-color);
+            background: #373752;
+        }
+
+        .catalog-item .icon {
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+
+        .catalog-item span {
+            font-size: 0.75rem;
+            display: block;
+        }
+
+        /* Universal Button styling for Desktop/Touch */
+        button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            min-height: 44px; /* Accessible Touch target */
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #delete-btn { background: #ef4444; }
+    </style>
+
+    <!-- Import Three.js and dependencies modules safely via ES Modules -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div id="ui-layer">
+        <header class="interactive">
+            <h1>Cozy Decorator 3D</h1>
+        </header>
+
+        <div id="action-menu" class="interactive">
+            <button id="rotate-btn">🔄 Rotate (R)</button>
+            <button id="place-btn">✅ Place</button>
+            <button id="delete-btn">🗑️ Remove</button>
+        </div>
+
+        <div id="catalog" class="interactive">
+            <div class="catalog-item" data-type="armchair">
+                <div class="icon">🪑</div>
+                <span>Armchair</span>
+            </div>
+            <div class="catalog-item" data-type="table">
+                <div class="icon">🪵</div>
+                <span>Table</span>
+            </div>
+            <div class="catalog-item" data-type="plant">
+                <div class="icon">🪴</div>
+                <span>Plant</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+
+        // --- Game Setup Configuration ---
+        const GRID_SIZE = 10;
+        const TILE_SIZE = 1;
+        const HALF_GRID = (GRID_SIZE * TILE_SIZE) / 2;
+
+        let scene, camera, renderer, controls;
+        let floorGrid, placementPlane;
+        let raycaster, mouse;
+        
+        // State Machine Tracking Variables
+        let activeItem = null;
+        let isPlacingMode = false;
+        const placedItems = [];
+
+        // Simple mock registry until paths are directed to your FBX files
+        const itemRegistry = {
+            armchair: { name: 'Armchair', color: 0x6366f1, geometryType: 'box', size: {x: 1, y: 1, z: 1}, file: 'armchair.fbx' },
+            table: { name: 'Table', color: 0xb45309, geometryType: 'box', size: {x: 2, y: 0.8, z: 1}, file: 'table.fbx' },
+            plant: { name: 'Plant', color: 0x10b981, geometryType: 'cylinder', size: {x: 0.6, y: 1.2, z: 0.6}, file: 'plant.fbx' }
+        };
+
+        init();
+        animate();
+
+        function init() {
+            const container = document.getElementById('canvas-container');
+
+            // 1. Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a24);
+
+            // 2. Isometric Isometric Orthographic Camera Configuration
+            const aspect = window.innerWidth / window.innerHeight;
+            const d = 6; 
+            camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 0.1, 1000);
+            
+            // Perfect Isometric Angle Position Setup
+            camera.position.set(10, 10, 10);
+            camera.lookAt(0, 0, 0);
+
+            // 3. Renderer Setup
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(renderer.domElement);
+
+            // 4. Fixed View Controller Restrictions
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = true;
+            controls.enablePan = false;
+            controls.enableRotate = false; // Lock rotation completely to keep perspective fixed
+            controls.target.set(0, 0, 0);
+            controls.update();
+
+            // 5. Lighting Environment
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionLight(0xffffff, 0.8);
+            dirLight.position.set(15, 20, 12);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+            dirLight.shadow.camera.left = -8;
+            dirLight.shadow.camera.right = 8;
+            dirLight.shadow.camera.top = 8;
+            dirLight.shadow.camera.bottom = -8;
+            dirLight.shadow.camera.near = 0.1;
+            dirLight.shadow.camera.far = 50;
+            scene.add(dirLight);
+
+            // 6. Grid Base Map Visual Setup
+            const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_SIZE, 0x6366f1, 0x373752);
+            gridHelper.position.y = 0.01; // Tiny lift to prevent rendering glitch with floor plane
+            scene.add(gridHelper);
+
+            // Visual room floor plate
+            const floorGeo = new THREE.BoxGeometry(GRID_SIZE, 0.2, GRID_SIZE);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x242432, roughness: 0.6 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.position.y = -0.1;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            // Invisible collision plane used specifically for mouse raycasting math mapping
+            const planeGeo = new THREE.PlaneGeometry(GRID_SIZE, GRID_SIZE);
+            planeGeo.rotateX(-Math.PI / 2);
+            placementPlane = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({ visible: false }));
+            scene.add(placementPlane);
+
+            // 7. Raycasting & Interaction Input Handling Setup
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Handle Desktop Interactions
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerdown', onPointerDown);
+            window.addEventListener('keydown', handleKeyboard);
+            window.addEventListener('resize', onWindowResize);
+
+            // Setup UI listeners
+            setupUI();
+        }
+
+        // --- Core Interaction Mechanics Logic Engine ---
+
+        function setupUI() {
+            const menu = document.getElementById('action-menu');
+
+            // Select item from catalog shelf
+            document.querySelectorAll('.catalog-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const type = e.currentTarget.getAttribute('data-type');
+                    spawnGhostItem(type);
+                    menu.classList.add('active');
+                });
+            });
+
+            // Rotation command execution
+            document.getElementById('rotate-btn').addEventListener('click', rotateActiveItem);
+            
+            // Placement confirmation execution
+            document.getElementById('place-btn').addEventListener('click', confirmPlacement);
+
+            // Delete processing mechanics
+            document.getElementById('delete-btn').addEventListener('click', abandonOrDeleteActive);
+        }
+
+        function spawnGhostItem(type) {
+            if (activeItem) scene.remove(activeItem);
+
+            const meta = itemRegistry[type];
+            const group = new THREE.Group();
+            group.userData = { ...meta, type: type, isGhost: true };
+
+            // Architectural implementation detail:
+            // Creating a structural proxy block placeholder mesh immediately.
+            // When your FBX assets match, replace this section with an FBXLoader task execution loop block.
+            let geo;
+            if (meta.geometryType === 'box') {
+                geo = new THREE.BoxGeometry(meta.size.x, meta.size.y, meta.size.z);
+            } else {
+                geo = new THREE.CylinderGeometry(meta.size.x/2, meta.size.x/2, meta.size.y, 16);
+            }
+            
+            const mat = new THREE.MeshStandardMaterial({ 
+                color: meta.color, 
+                transparent: true, 
+                opacity: 0.6,
+                roughness: 0.4
+            });
+            const mesh = new THREE.Mesh(geo, mat);
+            
+            // Ensure bottom alignment math matches the floor baseline perfectly
+            mesh.position.y = meta.size.y / 2;
+            mesh.castShadow = true;
+            group.add(mesh);
+
+            activeItem = group;
+            scene.add(activeItem);
+            isPlacingMode = true;
+        }
+
+        function onPointerMove(event) {
+            // Screen tracking coordinate processing calculation
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            if (!isPlacingMode || !activeItem) return;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(placementPlane);
+
+            if (intersects.length > 0) {
+                const intersectPoint = intersects[0].point;
+
+                // 10x10 Grid System Mathematical Snapping Formula Logic
+                let rawX = intersectPoint.x;
+                let rawZ = intersectPoint.z;
+
+                // Snap calculation relative to localized asset pivot configurations
+                let snappedX = Math.floor(rawX) + 0.5;
+                let snappedZ = Math.floor(rawZ) + 0.5;
+
+                // Clean boundaries lockdown checks preventing clipping off edge bounds limits boundaries 
+                const bound = HALF_GRID - 0.5;
+                snappedX = Math.max(-bound, Math.min(bound, snappedX));
+                snappedZ = Math.max(-bound, Math.min(bound, snappedZ));
+
+                // Smoothly slide the mesh ghost structure coordinates smoothly via calculations block
+                activeItem.position.set(snappedX, 0, snappedZ);
+            }
+        }
+
+        function onPointerDown(event) {
+            // Prevent interaction loops overriding background canvas spaces unexpectedly
+            if (event.target.tagName === 'BUTTON' || event.target.closest('#catalog')) return;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            if (!isPlacingMode) {
+                // Check if user is clicking an already placed item to modify/move it
+                const objectsToIntersect = placedItems.map(item => item.children[0]);
+                const intersects = raycaster.intersectObjects(objectsToIntersect);
+
+                if (intersects.length > 0) {
+                    // Item found! Pick it back up into active transformation adjustments states configuration mode
+                    const clickedMesh = intersects[0].object;
+                    const parentGroup = clickedMesh.parent;
+                    
+                    activeItem = parentGroup;
+                    placedItems.splice(placedItems.indexOf(activeItem), 1);
+                    
+                    // Re-apply ghost translucency highlight visual indicator properties details
+                    clickedMesh.material.transparent = true;
+                    clickedMesh.material.opacity = 0.6;
+                    
+                    isPlacingMode = true;
+                    document.getElementById('action-menu').classList.add('active');
+                }
+            }
+        }
+
+        function rotateActiveItem() {
+            if (!activeItem) return;
+            // Incremental rotation steps execution rules configuration mapping logic patterns block updates
+            activeItem.rotation.y += Math.PI / 2; // Right angle turn adjustments rotation loops step 90 degrees
+        }
+
+        function confirmPlacement() {
+            if (!activeItem) return;
+
+            // Strip away tracking modifiers properties to lock asset permanently context mesh settings properties 
+            const primaryMesh = activeItem.children[0];
+            primaryMesh.material.transparent = false;
+            primaryMesh.material.opacity = 1.0;
+            
+            // Add subtle scaling drop pop juice bounce visual feedback scale properties injection profile curves loop
+            activeItem.scale.set(1.2, 0.8, 1.2); // Squash structure configuration
+            
+            placedItems.push(activeItem);
+            
+            // Clear current working buffer pointers states records updates
+            activeItem = null;
+            isPlacingMode = false;
+            document.getElementById('action-menu').classList.remove('active');
+        }
+
+        function abandonOrDeleteActive() {
+            if (!activeItem) return;
+            scene.remove(activeItem);
+            activeItem = null;
+            isPlacingMode = false;
+            document.getElementById('action-menu').classList.remove('active');
+        }
+
+        function handleKeyboard(event) {
+            if (event.key === 'r' || event.key === 'R') {
+                rotateActiveItem();
+            }
+            if (event.key === 'Escape') {
+                abandonOrDeleteActive();
+            }
+            if (event.key === 'Enter') {
+                confirmPlacement();
+            }
+        }
+
+        function onWindowResize() {
+            const aspect = window.innerWidth / window.innerHeight;
+            const d = 6;
+            
+            camera.left = -d * aspect;
+            camera.right = d * aspect;
+            camera.top = d;
+            camera.bottom = -d;
+            
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // --- Frame Render Animation Tick Engine Loop Logic Processing ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Dynamic UI Juicy scale normalization transformation processing
+            if (!isPlacingMode) {
+                placedItems.forEach(item => {
+                    // Soft lerp back to normal baseline scale settings values
+                    item.scale.x += (1 - item.scale.x) * 0.2;
+                    item.scale.y += (1 - item.scale.y) * 0.2;
+                    item.scale.z += (1 - item.scale.z) * 0.2;
+                });
+            } else if (activeItem) {
+                // Gentle floating breath dynamic cycle animations to designate editing focus
+                const time = Date.now() * 0.004;
+                activeItem.children[0].position.y = (activeItem.userData.size.y / 2) + Math.sin(time) * 0.05;
+            }
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>

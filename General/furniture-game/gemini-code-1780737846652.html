@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cozy Decorator 3D</title>
+    <style>
+        :root {
+            --bg-color: #1a1a24;
+            --panel-color: #242432;
+            --accent-color: #6366f1;
+            --text-color: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Responsive UI Overlay */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .interactive {
+            pointer-events: auto;
+        }
+
+        header {
+            background: var(--panel-color);
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            align-self: flex-start;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Action Menu for Placement Control */
+        #action-menu {
+            display: flex;
+            gap: 12px;
+            align-self: center;
+            background: var(--panel-color);
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        #action-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Catalog Shelf at Bottom */
+        #catalog {
+            background: var(--panel-color);
+            width: 100%;
+            max-width: 600px;
+            align-self: center;
+            padding: 16px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+        }
+
+        .catalog-item {
+            background: #2e2e42;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 12px;
+            min-width: 90px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .catalog-item:hover {
+            border-color: var(--accent-color);
+            background: #373752;
+        }
+
+        .catalog-item .icon {
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+
+        .catalog-item span {
+            font-size: 0.75rem;
+            display: block;
+        }
+
+        /* Universal Button styling for Desktop/Touch targets */
+        button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            min-height: 44px; /* Optimal tablet hit target */
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #delete-btn { background: #ef4444; }
+    </style>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div id="ui-layer">
+        <header class="interactive">
+            <h1>Cozy Decorator 3D</h1>
+        </header>
+
+        <div id="action-menu" class="interactive">
+            <button id="rotate-btn">🔄 Rotate (R)</button>
+            <button id="place-btn">✅ Place</button>
+            <button id="delete-btn">🗑️ Remove</button>
+        </div>
+
+        <div id="catalog" class="interactive">
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+
+        // --- Game Setup Configuration ---
+        const GRID_SIZE = 10;
+        const TILE_SIZE = 1;
+        const HALF_GRID = (GRID_SIZE * TILE_SIZE) / 2;
+
+        let scene, camera, renderer, controls;
+        let floorGrid, placementPlane;
+        let raycaster, mouse;
+        
+        // State Machine Tracking Variables
+        let activeItem = null;
+        let isPlacingMode = false;
+        const placedItems = [];
+
+        // --- Your Catalog Asset Registry ---
+        // Add your remaining 51 items following this exact layout pattern!
+        const itemRegistry = {
+            armchair: { name: 'Armchair', file: 'armchair.fbx' },
+            table: { name: 'Table', file: 'table.fbx' },
+            plant: { name: 'Plant', file: 'plant.fbx' }
+            oval rug A: { name: 'Oval Rug', file: 'rug_oval_A.fbx' },
+            small table: { name: 'Small Table', file: 'table_small.fbx' },
+            single bed: { name: 'Single Bed', file: 'bed_single_A.fbx' }
+				
+        };
+
+// --- Automatic Catalog Menu Generator ---
+function generateCatalogUI() {
+    const catalogContainer = document.getElementById('catalog');
+    catalogContainer.innerHTML = ''; // Clear out any existing placeholders
+
+    // Loop through every single item configuration defined in your registry
+    Object.keys(itemRegistry).forEach(key => {
+        const item = itemRegistry[key];
+
+        // 1. Create a clickable button card for the item
+        const card = document.createElement('div');
+        card.className = 'catalog-item';
+        card.setAttribute('data-type', key);
+
+        // 2. Set up a default visual icon emoji
+        // You can customize icons later or leave it as a universal furniture block 📦
+        let iconEmoji = '📦'; 
+        if (key.includes('chair') || key.includes('stool')) iconEmoji = '🪑';
+        if (key.includes('table') || key.includes('desk')) iconEmoji = '🪵';
+        if (key.includes('plant') || key.includes('flower')) iconEmoji = '🪴';
+        if (key.includes('lamp') || key.includes('light')) iconEmoji = '💡';
+        if (key.includes('sofa') || key.includes('couch')) iconEmoji = '🛋️';
+        if (key.includes('bed')) iconEmoji = '🛏️';
+
+        // 3. Populate the layout card with text and structure layouts
+        card.innerHTML = `
+            <div class="icon">${iconEmoji}</div>
+            <span>${item.name}</span>
+        `;
+
+        // 4. Attach a click event listener so clicking the card spawns the item
+        card.addEventListener('click', () => {
+            spawnGhostItem(key);
+            document.getElementById('action-menu').classList.add('active');
+        });
+
+        // 5. Inject the finished card into the visual user shelf interface panel
+        catalogContainer.appendChild(card);
+    });
+}
+
+// Make sure to call this function inside your init() setup to build the board!
+
+        init();
+        animate();
+
+        function init() {
+            const container = document.getElementById('canvas-container');
+
+            // 1. Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a24);
+
+            // 2. Isometric Orthographic Camera Configuration
+            const aspect = window.innerWidth / window.innerHeight;
+            const d = 6; 
+            camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 0.1, 1000);
+            
+            // Perfect Isometric Angle Positions Setup
+            camera.position.set(10, 10, 10);
+            camera.lookAt(0, 0, 0);
+
+            // 3. Renderer Setup
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(renderer.domElement);
+
+            // 4. View Controller Controls Setup
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = true;
+            controls.enablePan = false;
+            controls.enableRotate = false; // Lock rotation to keep perspective fixed isometric
+            controls.target.set(0, 0, 0);
+            controls.update();
+
+            // 5. Lighting Environment
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionLight(0xffffff, 0.8);
+            dirLight.position.set(15, 20, 12);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+            dirLight.shadow.camera.left = -8;
+            dirLight.shadow.camera.right = 8;
+            dirLight.shadow.camera.top = 8;
+            dirLight.shadow.camera.bottom = -8;
+            dirLight.shadow.camera.near = 0.1;
+            dirLight.shadow.camera.far = 50;
+            scene.add(dirLight);
+
+            // 6. Grid Map Environment Elements
+            const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_SIZE, 0x6366f1, 0x373752);
+            gridHelper.position.y = 0.01; // Avoid z-fighting artifacts
+            scene.add(gridHelper);
+
+            // Visual Room Floor Base
+            const floorGeo = new THREE.BoxGeometry(GRID_SIZE, 0.2, GRID_SIZE);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x242432, roughness: 0.6 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.position.y = -0.1;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            // Invisible collision plane used specifically for tracking cursor projection intersection points
+            const planeGeo = new THREE.PlaneGeometry(GRID_SIZE, GRID_SIZE);
+            planeGeo.rotateX(-Math.PI / 2);
+            placementPlane = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({ visible: false }));
+            scene.add(placementPlane);
+
+            // 7. Raycasting & Interaction Input Event Setups
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerdown', onPointerDown);
+            window.addEventListener('keydown', handleKeyboard);
+            window.addEventListener('resize', onWindowResize);
+
+            // setupUI(); // You can comment out or remove the old setupUI call
+    generateCatalogUI(); // Run our new smart layout script instead!
+}
+        }
+
+        // --- Core Interaction Mechanics Logic Engine ---
+
+        function setupUI() {
+            const menu = document.getElementById('action-menu');
+
+            // Select item from catalog shelf
+            document.querySelectorAll('.catalog-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const type = e.currentTarget.getAttribute('data-type');
+                    spawnGhostItem(type);
+                    menu.classList.add('active');
+                });
+            });
+
+            document.getElementById('rotate-btn').addEventListener('click', rotateActiveItem);
+            document.getElementById('place-btn').addEventListener('click', confirmPlacement);
+            document.getElementById('delete-btn').addEventListener('click', abandonOrDeleteActive);
+        }
+
+        // --- Smart Automatic Dynamic FBX Loader System ---
+        function spawnGhostItem(type) {
+            if (activeItem) scene.remove(activeItem);
+
+            const meta = itemRegistry[type];
+            if (!meta) return;
+
+            // Anchor setup tracking group wrapper
+            const group = new THREE.Group();
+            group.userData = { ...meta, type: type, isGhost: true };
+            
+            activeItem = group;
+            scene.add(activeItem);
+            isPlacingMode = true;
+
+            // Initialize texture mapping profiles
+            const textureLoader = new THREE.TextureLoader();
+            const furnitureTexture = textureLoader.load('furniturebits_texture.png');
+            furnitureTexture.colorSpace = THREE.SRGBColorSpace; 
+
+            // Initialize FBX processing thread loading modules
+            const loader = new FBXLoader();
+            
+            loader.load(meta.file, function (fbx) {
+                // Ensure context logic thread state hasn't shifted during assets download pipeline
+                if (!activeItem || activeItem.userData.type !== type) return;
+
+                fbx.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = new THREE.MeshStandardMaterial({
+                            map: furnitureTexture,
+                            transparent: true,
+                            opacity: 0.6, // Semi-transparent ghost preview
+                            roughness: 0.6
+                        });
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+
+                // AUTOMATIC SIZE TRACKING MATHEMATICS CALCULATION ENGINE
+                const boundingBox = new THREE.Box3().setFromObject(fbx);
+                const size = new THREE.Vector3();
+                boundingBox.getSize(size);
+                activeItem.userData.size = size;
+
+                // AUTOMATIC CENTERING ALIGNMENT LOGIC PIPELINE
+                const center = new THREE.Vector3();
+                boundingBox.getCenter(center);
+                
+                fbx.position.x = -center.x;
+                fbx.position.z = -center.z;
+                fbx.position.y = -boundingBox.min.y; // Pin base flat directly on top floor lines cleanly
+
+                group.add(fbx);
+
+            }, function (xhr) {
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            }, function (error) {
+                console.error('An error occurred loading your FBX file asset:', error);
+            });
+        }
+
+        function onPointerMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            if (!isPlacingMode || !activeItem) return;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(placementPlane);
+
+            if (intersects.length > 0) {
+                const intersectPoint = intersects[0].point;
+
+                // 10x10 Grid System Mathematical Snapping Formula Logic
+                let snappedX = Math.floor(intersectPoint.x) + 0.5;
+                let snappedZ = Math.floor(intersectPoint.z) + 0.5;
+
+                // Boundary collision limitation clamp limits
+                const bound = HALF_GRID - 0.5;
+                snappedX = Math.max(-bound, Math.min(bound, snappedX));
+                snappedZ = Math.max(-bound, Math.min(bound, snappedZ));
+
+                activeItem.position.set(snappedX, 0, snappedZ);
+            }
+        }
+
+        function onPointerDown(event) {
+            if (event.target.tagName === 'BUTTON' || event.target.closest('#catalog')) return;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            if (!isPlacingMode) {
+                // Check if user is clicking an already placed item to modify/move it
+                const objectsToIntersect = [];
+                placedItems.forEach(item => {
+                    item.traverse(child => {
+                        if (child.isMesh) objectsToIntersect.push(child);
+                    });
+                });
+
+                const intersects = raycaster.intersectObjects(objectsToIntersect);
+
+                if (intersects.length > 0) {
+                    let clickedMesh = intersects[0].object;
+                    
+                    // Trace back up up hierarchy layers until finding the primary group anchor element node 
+                    let rootGroup = clickedMesh;
+                    while (rootGroup.parent && rootGroup.parent.type !== 'Scene') {
+                        rootGroup = rootGroup.parent;
+                    }
+                    
+                    activeItem = rootGroup;
+                    placedItems.splice(placedItems.indexOf(activeItem), 1);
+                    
+                    // Restore semi-translucent properties adjustments flags
+                    activeItem.traverse(child => {
+                        if (child.isMesh && child.material) {
+                            child.material.transparent = true;
+                            child.material.opacity = 0.6;
+                        }
+                    });
+                    
+                    isPlacingMode = true;
+                    document.getElementById('action-menu').classList.add('active');
+                }
+            }
+        }
+
+        function rotateActiveItem() {
+            if (!activeItem) return;
+            activeItem.rotation.y += Math.PI / 2; // Snaps exactly 90 degrees on every action invocation
+        }
+
+        function confirmPlacement() {
+            if (!activeItem) return;
+
+            // Make materials solid and completely opaque
+            activeItem.traverse(function (child) {
+                if (child.isMesh && child.material) {
+                    child.material.transparent = false;
+                    child.material.opacity = 1.0;
+                }
+            });
+            
+            // Satisfying juice feedback transformation scale bounce
+            activeItem.scale.set(1.1, 0.9, 1.1); 
+            
+            placedItems.push(activeItem);
+            
+            activeItem = null;
+            isPlacingMode = false;
+            document.getElementById('action-menu').classList.remove('active');
+        }
+
+        function abandonOrDeleteActive() {
+            if (!activeItem) return;
+            scene.remove(activeItem);
+            activeItem = null;
+            isPlacingMode = false;
+            document.getElementById('action-menu').classList.remove('active');
+        }
+
+        function handleKeyboard(event) {
+            if (event.key === 'r' || event.key === 'R') rotateActiveItem();
+            if (event.key === 'Escape') abandonOrDeleteActive();
+            if (event.key === 'Enter') confirmPlacement();
+        }
+
+        function onWindowResize() {
+            const aspect = window.innerWidth / window.innerHeight;
+            const d = 6;
+            
+            camera.left = -d * aspect;
+            camera.right = d * aspect;
+            camera.top = d;
+            camera.bottom = -d;
+            
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // --- Render Frame Animation Loop Processing ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Dynamic scale stabilization interpolation
+            if (!isPlacingMode) {
+                placedItems.forEach(item => {
+                    item.scale.x += (1 - item.scale.x) * 0.2;
+                    item.scale.y += (1 - item.scale.y) * 0.2;
+                    item.scale.z += (1 - item.scale.z) * 0.2;
+                });
+            } else if (activeItem && activeItem.children.length > 0) {
+                // Subtle floating breath animation loop indicates active edit state
+                const time = Date.now() * 0.004;
+                const baseHeight = 0; 
+                activeItem.children[0].position.y = baseHeight + Math.sin(time) * 0.04;
+            }
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
