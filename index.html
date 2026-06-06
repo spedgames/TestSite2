@@ -99,7 +99,7 @@
         #header-search {
             padding: 8px 16px 8px 36px;
             border-radius: 10px;
-            border: 1.5px solid var(--border);
+            border: 2px solid var(--border);
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             outline: none;
@@ -381,7 +381,7 @@
             width: 100%;
             padding: 8px 12px 8px 32px;
             border-radius: 10px;
-            border: 1.5px solid var(--border);
+            border: 2px solid var(--border);
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             outline: none;
@@ -425,18 +425,27 @@
 
         /* Mobile nav drawer */
         .mobile-nav-drawer {
-            display: none;
             position: fixed;
             top: var(--header-h); left: 0; right: 0;
             background: white;
             border-bottom: 1px solid var(--border);
             padding: 12px 20px 16px;
             z-index: 999;
+            display: flex;
             flex-direction: column;
             gap: 4px;
             box-shadow: 0 8px 16px -4px rgba(15,23,42,0.1);
+            /* Animate in/out */
+            transform: translateY(-8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease;
         }
-        .mobile-nav-drawer.open { display: flex; }
+        .mobile-nav-drawer.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
         .mobile-nav-drawer button {
             background: none; border: none;
             font-family: 'Poppins', sans-serif;
@@ -456,20 +465,27 @@
             justify-content: space-between;
         }
         #mnav-chevron {
-            transition: transform 0.22s ease;
+            transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
             flex-shrink: 0;
         }
         .mnav-submenu-open #mnav-chevron { transform: rotate(180deg); }
 
+        /* Submenu — smooth max-height transition */
         .mnav-submenu {
-            display: none;
+            display: flex;
             flex-direction: column;
             background: #f8fafc;
             border-radius: 10px;
             margin: 2px 0 4px;
             overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease;
         }
-        .mnav-submenu.open { display: flex; }
+        .mnav-submenu.open {
+            max-height: 300px;
+            opacity: 1;
+        }
 
         .mnav-sub-item {
             background: none !important;
@@ -678,6 +694,15 @@
         }
         .form-status.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: block; }
         .form-status.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+
+        .field-error {
+            font-size: 0.75rem;
+            color: #ef4444;
+            margin-top: 4px;
+            display: none;
+        }
+        .field-error.visible { display: block; }
+        .form-input.invalid { border-color: #ef4444; }
 
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
@@ -947,7 +972,7 @@
             <div id="tab-submit-game" class="tab-panel active">
                 <div class="form-card">
                     <h2>Submit a Game</h2>
-                    <p class="form-desc">Share a game you've created. Please fill in all required fields. The ICT team will review the game and notify you before adding it to the library.</p>
+                    <p class="form-desc">Share a game you've created. Please fill in all required fields. Your game will be reviewed before being added to the library.</p>
 
                     <div class="form-row">
                         <label class="form-label">Game Title <span>*</span></label>
@@ -959,7 +984,8 @@
                     </div>
                     <div class="form-row">
                         <label class="form-label">Your Email <span>*</span></label>
-                        <input type="email" class="form-input" id="sg-email" placeholder="e.g. teacher@rainbowcentre.org.sg">
+                        <input type="email" class="form-input" id="sg-email" placeholder="e.g. teacher@rainbowcentre.org.sg" oninput="validateEmailField('sg-email','sg-email-err')">
+                        <span class="field-error" id="sg-email-err">Please enter a valid email address.</span>
                     </div>
                     <div class="form-row">
                         <label class="form-label">Description <span>*</span></label>
@@ -972,7 +998,7 @@
                     <div class="form-row">
                         <label class="form-label">Link to Game File <span>*</span></label>
                         <input type="url" class="form-input" id="sg-file-link" placeholder="e.g. https://drive.google.com/… or https://codepen.io/…">
-                        <p style="font-size:0.78rem;color:var(--text-light);margin:5px 0 0;line-height:1.5;">Share a Google Drive or Codepen link to your HTML file. If you have assets such as images, include a link to the folder with all these files as well.</p>
+                        <p style="font-size:0.78rem;color:var(--text-light);margin:5px 0 0;line-height:1.5;">Share a link to your HTML file. We recommend uploading to <a href="https://drive.google.com" target="_blank" style="color:var(--primary);">Google Drive</a> (set sharing to "Anyone with the link") or hosting on <a href="https://codepen.io" target="_blank" style="color:var(--primary);">CodePen</a>.</p>
                     </div>
                     <button class="form-submit-btn" data-label="Submit Game" onclick="submitGame()">Submit Game</button>
                     <div class="form-status" id="sg-status"></div>
@@ -991,7 +1017,8 @@
                     </div>
                     <div class="form-row">
                         <label class="form-label">Your Email</label>
-                        <input type="email" class="form-input" id="ss-email" placeholder="Optional — so we can follow up with you">
+                        <input type="email" class="form-input" id="ss-email" placeholder="Optional — so we can follow up with you" oninput="validateEmailField('ss-email','ss-email-err')">
+                        <span class="field-error" id="ss-email-err">Please enter a valid email address.</span>
                     </div>
                     <div class="form-row">
                         <label class="form-label">Game Idea or Learning Objective <span>*</span></label>
@@ -1027,7 +1054,8 @@
                 </div>
                 <div class="form-row">
                     <label class="form-label">Your Email</label>
-                    <input type="email" class="form-input" id="fb-email" placeholder="Optional — so we can follow up">
+                    <input type="email" class="form-input" id="fb-email" placeholder="Optional — so we can follow up" oninput="validateEmailField('fb-email','fb-email-err')">
+                    <span class="field-error" id="fb-email-err">Please enter a valid email address.</span>
                 </div>
                 <div class="form-row">
                     <label class="form-label">Your Feedback <span>*</span></label>
@@ -1441,6 +1469,15 @@ function showStatus(id, type, message) {
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+function validateEmailField(inputId, errId) {
+    const input = document.getElementById(inputId);
+    const err   = document.getElementById(errId);
+    const val   = input.value.trim();
+    const valid = val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    input.classList.toggle('invalid', !valid);
+    err.classList.toggle('visible', !valid);
+    return valid;
+}
 function validateRequired(fields) {
     for (const [id, label] of fields) {
         const el = document.getElementById(id);
@@ -1489,6 +1526,7 @@ async function submitGame() {
 
     const fileLink = document.getElementById('sg-file-link').value.trim();
     if (!fileLink) { showStatus('sg-status', 'error', 'Please provide a link to the game file.'); return; }
+    if (!validateEmailField('sg-email', 'sg-email-err')) { showStatus('sg-status', 'error', 'Please enter a valid email address.'); return; }
 
     const ok = await postToFormspree(FORMSPREE_CONTRIBUTE, {
         _subject:            'New Game Submission: ' + document.getElementById('sg-title').value.trim(),
@@ -1510,6 +1548,7 @@ async function submitGame() {
 async function submitSuggestion() {
     const idea = document.getElementById('ss-idea').value.trim();
     if (!idea) { showStatus('ss-status', 'error', 'Please describe your game idea or learning objective.'); return; }
+    if (!validateEmailField('ss-email', 'ss-email-err')) { showStatus('ss-status', 'error', 'Please enter a valid email address.'); return; }
 
     const email = document.getElementById('ss-email').value.trim();
     const payload = {
@@ -1529,6 +1568,7 @@ async function submitSuggestion() {
 async function submitFeedback() {
     const message = document.getElementById('fb-message').value.trim();
     if (!message) { showStatus('fb-status', 'error', 'Please write your feedback before sending.'); return; }
+    if (!validateEmailField('fb-email', 'fb-email-err')) { showStatus('fb-status', 'error', 'Please enter a valid email address.'); return; }
 
     const typeBtn = document.querySelector('.feedback-type-btn.active');
     const type    = typeBtn ? typeBtn.textContent.trim() : 'General Feedback';
