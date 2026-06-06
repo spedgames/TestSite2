@@ -1,0 +1,416 @@
+[
+   {
+    "id": "pizza-chef",
+    "title": "Pizza Chef",
+    "description": "Count ingredients and follow recipes to make pizzas!",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["counting", "numbers", "ICT", "mouse", "digital literacy", "drag and drop"],
+    "uploadDate": "2026-06-06"
+  },
+   {
+    "id": "logo-puzzles",
+    "title": "Logo Puzzles",
+    "description": "Practice right-click copy and paste to complete logo puzzles.",
+    "creatorName": "Teacher Carmina",
+    "category": "General",
+    "compatibility": ["desktop"],
+    "tags": ["copy", "paste", "ICT", "mouse", "keyboard", "digital literacy"],
+    "uploadDate": "2026-06-05"
+  },
+    {
+    "id": "click-the-dots",
+    "title": "Click the Dots Mouse Practice",
+    "description": "Keep clicking the red dot as it gets smaller and smaller.",
+    "creatorName": "Teacher Carmina",
+    "category": "General",
+    "compatibility": ["desktop"],
+    "tags": ["ICT", "mouse", "digital literacy"],
+    "uploadDate": "2026-06-05"
+  },
+  {
+    "id": "file-explorer",
+    "title": "File Explorer",
+    "description": "Find treasures within the file folders in this Windows mockup.",
+    "creatorName": "Teacher Carmina",
+    "category": "General",
+    "compatibility": ["desktop"],
+    "tags": ["ICT", "mouse", "digital literacy"],
+    "uploadDate": "2026-06-05"
+  },
+  {
+    "id": "twinkle-twinkle",
+    "title": "Twinkle Twinkle Mouse Practice",
+    "description": "Tap the star to play the notes of the song.",
+    "creatorName": "Teacher Carmina",
+    "category": "General",
+    "compatibility": ["desktop"],
+    "tags": ["ICT", "mouse", "digital literacy"],
+    "uploadDate": "2026-06-05"
+  },
+  {
+    "id": "spell-and-pop",
+    "title": "Spell and Pop",
+    "description": "Key in your own words, then type them out to pop the balloons.",
+    "creatorName": "Teacher Carmina",
+    "category": "Literacy",
+    "compatibility": ["desktop"],
+    "tags": ["spelling", "typing", "ICT", "digital literacy"],
+    "uploadDate": "2026-06-05"
+  },
+  {
+    "id": "block-number-quiz",
+    "title": "Block Number Quiz",
+    "description": "What block number is this?",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["numbers", "address", "personal information"],
+    "uploadDate": "2026-06-01"
+  },
+  {
+    "id": "letter-matcher",
+    "title": "Letter Matcher",
+    "description": "Match lowercase to uppercase letters",
+    "creatorName": "Teacher Carmina",
+    "category": "Literacy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["letters", "alphabet", "case"],
+    "uploadDate": "2026-06-01"
+  },
+  {
+    "id": "trace-and-learn",
+    "title": "Trace and Learn",
+    "description": "Trace the shapes and lines.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["shapes", "lines", "fine motor skills", "tracing", "geometry"],
+    "uploadDate": "2026-06-01"
+  },
+  {
+    "id": "public-and-private-at-home",
+    "title": "Public and Private Behaviours at Home",
+    "description": "What is the right place for these public and private behaviours?",
+    "creatorName": "Teacher Carmina",
+    "category": "SEL",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["public and private places", "public and private behaviours"],
+    "uploadDate": "2026-05-31"
+  },
+  {
+    "id": "toy-sale",
+    "title": "Toy Sale",
+    "description": "Buy items from toy store with Singapore money.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["money", "purchasing"],
+    "uploadDate": "2026-01-15"
+  },
+  {
+    "id": "daily-calendar",
+    "title": "Daily Calendar",
+    "description": "Find the day and date today!",
+    "creatorName": "Teacher Nurul",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["months of the year", "date", "days of the week"],
+    "uploadDate": "2026-05-31"
+  },
+  {
+    "id": "supermarket-run",
+    "title": "Supermarket Run",
+    "description": "Collect and pay for the items in your shopping list.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["money", "purchasing", "exact combination"],
+    "uploadDate": "2026-05-31"
+  },
+  {
+    "id": "phonics-words",
+    "title": "Phonics Word Practice",
+    "description": "Listen and tap or spell the CVC, CVCC, or CCVC word.",
+    "creatorName": "Teacher Carmina",
+    "category": "Literacy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["phonics", "coding", "dictation"],
+    "uploadDate": "2026-05-30"
+  },
+  {
+    "id": "typing-game-people-in-my-neighbourhood",
+    "title": "People in My Neighbourhood",
+    "description": "Name the people in your neighbourhood by typing.",
+    "creatorName": "Teacher Joan",
+    "category": "Literacy",
+    "compatibility": ["desktop"],
+    "tags": ["safety", "community living", "vocabulary", "typing"],
+    "uploadDate": "2026-5-30",
+    "url": "https://scratch.mit.edu/projects/1320444978/",
+    "thumbnail": "https://uploads.scratch.mit.edu/get_image/project/1320444978_480x360.png"
+  },
+  {
+    "id": "road-crossing-safety",
+    "title": "Road Crossing Safety",
+    "description": "Identify safe and dangerous behaviours when crossing the road.",
+    "creatorName": "Teacher Joan",
+    "category": "Daily Living",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["safety", "road crossing", "mobility"],
+    "uploadDate": "2026-5-30",
+    "url": "https://scratch.mit.edu/projects/1320927852/",
+    "thumbnail": "https://uploads.scratch.mit.edu/get_image/project/1320927852_480x360.png"
+  },
+  {
+    "id": "sight-words-game",
+    "title": "Dolch Sight Words Quiz",
+    "description": "Listen and guess the Dolch sight word.",
+    "creatorName": "Teacher Carmina",
+    "category": "Literacy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["reading", "coding", "sight words"],
+    "uploadDate": "2026-05-28"
+  },
+  {
+    "id": "scoop-shop",
+    "title": "Scoop Shop",
+    "description": "Buy scoops of ice cream and practice reading prices with dollar and cent symbols.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["money", "purchasing"],
+    "uploadDate": "2026-05-18"
+  },
+  {
+    "id": "week-letter-sounds",
+    "title": "Week Letter Sounds",
+    "description": "Identify the intial letter sounds of the days of the week.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["days of the week", "initial letter sounds"],
+    "uploadDate": "2026-02-10"
+  },
+  {
+    "id": "feed-the-monster",
+    "title": "Feed the Monster",
+    "description": "Tap the set that is more, to feed the hungry monster.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["number comparison", "more"],
+    "uploadDate": "2026-05-12"
+  },
+  {
+    "id": "fish-shop",
+    "title": "Fish Market",
+    "description": "Buy fish for your aquarium using absolute combinations.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["money", "purchasing", "dollar and cents"],
+    "uploadDate": "2026-05-22"
+  },
+  {
+    "id": "number-learning",
+    "title": "Number Learning Cards",
+    "description": "Recap numbers and quantities to 10.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["numbers", "counting"],
+    "uploadDate": "2026-05-01"
+  },
+  {
+    "id": "quack-and-count",
+    "title": "Quack and Count",
+    "description": "Count 1 to 5 ducks! Companion game to Five Little Ducks story.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["numbers", "counting"],
+    "uploadDate": "2026-05-15"
+  },
+  {
+    "id": "addition-to-5",
+    "title": "Addition to 5",
+    "description": "Practice addition to 5, with or without visual support.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["addition", "operations"],
+    "uploadDate": "2026-03-05"
+  },
+  {
+    "id": "city-crossings",
+    "title": "City Crossings",
+    "description": "Cross the roads using the zebra crossings to get to the right building.",
+    "creatorName": "Teacher Carmina",
+    "category": "Daily Living",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["safety", "mobility"],
+    "uploadDate": "2026-05-19"
+  },
+  {
+    "id": "five-senses",
+    "title": "Five Senses",
+    "description": "Match the body parts to the senses.",
+    "creatorName": "Teacher Carmina",
+    "category": "Literacy",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["body parts", "sentence building", "vocabulary"],
+    "uploadDate": "2026-05-25"
+  },
+  {
+    "id": "fruit-colours",
+    "title": "Fruit Colours",
+    "description": "Build sentences to describe the fruits.",
+    "creatorName": "Teacher Carmina",
+    "category": "Literacy",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["attributes", "sentence building", "vocabulary", "writing"],
+    "uploadDate": "2026-05-26"
+  },
+  {
+    "id": "hungry-observer",
+    "title": "The Hungry Observer",
+    "description": "Complete I eat... sentences.",
+    "creatorName": "Teacher Carmina",
+    "category": "Literacy",
+    "compatibility": ["desktop"],
+    "tags": ["predictable charts", "sentence building", "vocabulary", "writing"],
+    "uploadDate": "2026-05-02"
+  },
+  {
+    "id": "refrigerator-sorter",
+    "title": "Refrigerator Sorter",
+    "description": "Sort the items to the freezer and fridge sections.",
+    "creatorName": "Teacher Carmina",
+    "category": "Daily Living",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["food safety", "home living"],
+    "uploadDate": "2026-05-08"
+  },
+  {
+    "id": "restaurant-self-checkout",
+    "title": "Restaurant Self-Checkout",
+    "description": "Pretend play restaurant POS system for practising money skills.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["money", "purchasing"],
+    "uploadDate": "2025-12-20"
+  },
+  {
+    "id": "restroom-rush",
+    "title": "Restroom Rush",
+    "description": "Find the correct toilet quickly.",
+    "creatorName": "Teacher Carmina",
+    "category": "Daily Living",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["toileting", "toilet signs"],
+    "uploadDate": "2025-11-14"
+  },
+  {
+    "id": "sound-synth",
+    "title": "Sound Synth",
+    "description": "Sound buttons and synthesizer.",
+    "creatorName": "Teacher Carmina",
+    "category": "General",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["tool", "sensory"],
+    "uploadDate": "2026-01-22"
+  },
+  {
+    "id": "subtraction-fun",
+    "title": "Subtraction Fun",
+    "description": "Subtraction quiz game with guided modes.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["subtraction", "operations"],
+    "uploadDate": "2025-10-05"
+  },
+  {
+    "id": "visuals-mate",
+    "title": "Visuals Mate",
+    "description": "Make work systems and AAC quickly.",
+    "creatorName": "Teacher Carmina",
+    "category": "General",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["communication", "structured teaching", "tool"],
+    "uploadDate": "2026-05-14"
+  },
+  {
+    "id": "identify-emotions",
+    "title": "Identify Emotions",
+    "description": "Tap on the correct emotions based on the image shown.",
+    "creatorName": "Teacher Carmina",
+    "category": "SEL",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["emotions", "regulation"],
+    "uploadDate": "2026-05-11"
+  },
+  {
+    "id": "laundry-day",
+    "title": "Laundry Day",
+    "description": "Sort whites and coloured clothes.",
+    "creatorName": "Teacher Carmina",
+    "category": "Daily Living",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["self care", "home living"],
+    "uploadDate": "2025-09-12"
+  },
+  {
+    "id": "safari-match",
+    "title": "Safari Match",
+    "description": "Match more and less visuals or words to the correct set.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["numbers", "counting"],
+    "uploadDate": "2025-08-19"
+  },
+  {
+    "id": "days-of-the-week",
+    "title": "Days of the Week",
+    "description": "Sequence the Days of the Week.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["week"],
+    "uploadDate": "2025-07-04"
+  },
+  {
+    "id": "counting-fun",
+    "title": "Counting Fun",
+    "description": "Tap on each item to count, then tap the number that matches the quantity.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["tablet", "mobile"],
+    "tags": ["numbers", "counting"],
+    "uploadDate": "2025-06-15"
+  },
+  {
+    "id": "fraction-fun",
+    "title": "Fraction Fun",
+    "description": "Learn about numerators with interactive activity.",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet", "mobile"],
+    "tags": ["fractions", "numerator"],
+    "uploadDate": "2025-05-20"
+  },
+  {
+    "id": "math-quest",
+    "title": "Math Quest",
+    "description": "Get treasure and fight enemies with math!",
+    "creatorName": "Teacher Carmina",
+    "category": "Numeracy",
+    "compatibility": ["desktop", "tablet"],
+    "tags": ["addition", "subtraction"],
+    "uploadDate": "2025-04-11"
+  }
+]
