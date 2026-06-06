@@ -890,7 +890,10 @@ function doSearch(term) {
     document.getElementById('search-heading').textContent = `Results for "${term}"`;
     document.getElementById('search-count').textContent = `${results.length} game${results.length !== 1 ? 's' : ''}`;
     renderGrid('search-grid', results);
-    showPage('search');
+    // Switch page without triggering closeMobileNav
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-search').classList.add('active');
+    document.querySelectorAll('.header-nav button').forEach(b => b.classList.remove('active'));
 }
 function toggleFilter(key) {
     const body = document.getElementById('body-' + key);
