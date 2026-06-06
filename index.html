@@ -99,7 +99,7 @@
         #header-search {
             padding: 8px 16px 8px 36px;
             border-radius: 10px;
-            border: 1.5px solid var(--border);
+            border: 2px solid var(--border);
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             outline: none;
@@ -381,7 +381,7 @@
             width: 100%;
             padding: 8px 12px 8px 32px;
             border-radius: 10px;
-            border: 1.5px solid var(--border);
+            border: 2px solid var(--border);
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             outline: none;
@@ -394,16 +394,15 @@
         .hamburger {
             display: none;
             background: none;
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            width: 38px; height: 38px;
+            border: none;
+            padding: 4px;
+            width: 36px; height: 36px;
             align-items: center; justify-content: center;
             cursor: pointer;
             flex-shrink: 0;
             color: var(--text-dark);
-            font-size: 1.1rem;
         }
-        .hamburger:hover { background: #f1f5f9; }
+        .hamburger:hover { opacity: 0.6; }
 
         .mobile-filter-btn {
             display: none;
@@ -561,7 +560,13 @@
 
 <!-- HEADER -->
 <header>
-    <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
+    <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect y="0" width="22" height="2.5" rx="1.25" fill="currentColor"/>
+            <rect y="6.75" width="22" height="2.5" rx="1.25" fill="currentColor"/>
+            <rect y="13.5" width="22" height="2.5" rx="1.25" fill="currentColor"/>
+        </svg>
+    </button>
     <button class="brand-title" onclick="showPage('home');closeMobileNav()">🎮 AHS Game Library</button>
     <nav class="header-nav">
         <button id="nav-browse" onclick="showPage('browse')">Browse Games</button>
@@ -960,9 +965,12 @@ function syncToMobile(category) {
     const mcat = document.querySelector(`input[name="mcat"][value="${category}"]`);
     if (mcat) mcat.checked = true;
     const container = document.getElementById('mtopic-options');
-    let topics = category && TOPICS[category]
-        ? Object.keys(TOPICS[category])
-        : [...new Set(Object.values(TOPICS).flatMap(t => Object.keys(t)))].sort();
+    let topics;
+    if (category && TOPICS[category]) {
+        topics = Object.keys(TOPICS[category]);
+    } else {
+        topics = [...new Set(TOPIC_ORDER.flatMap(cat => TOPICS[cat] ? Object.keys(TOPICS[cat]) : []))];
+    }
     container.innerHTML = topics.map(t =>
         `<label class="filter-option"><input type="checkbox" value="${t}" onchange="syncFromMobile()"> ${t}</label>`
     ).join('');
@@ -1002,11 +1010,17 @@ function toggleFilter(key) {
 }
 
 /* ── TOPIC OPTIONS ── */
+const TOPIC_ORDER = ['Literacy', 'Numeracy', 'SEL', 'Daily Living', 'General'];
+
 function populateTopicOptions(category) {
     const container = document.getElementById('topic-options');
-    let topics = category && TOPICS[category]
-        ? Object.keys(TOPICS[category])
-        : [...new Set(Object.values(TOPICS).flatMap(t => Object.keys(t)))].sort();
+    let topics;
+    if (category && TOPICS[category]) {
+        topics = Object.keys(TOPICS[category]);
+    } else {
+        // Preserve category order: Literacy first, then Numeracy, etc.
+        topics = [...new Set(TOPIC_ORDER.flatMap(cat => TOPICS[cat] ? Object.keys(TOPICS[cat]) : []))];
+    }
     container.innerHTML = topics.map(t =>
         `<label class="filter-option"><input type="checkbox" value="${t}" onchange="applyFilters()"> ${t}</label>`
     ).join('');
