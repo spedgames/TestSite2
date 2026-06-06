@@ -99,7 +99,7 @@
         #header-search {
             padding: 8px 16px 8px 36px;
             border-radius: 10px;
-            border: 2px solid var(--border);
+            border: 1.5px solid var(--border);
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             outline: none;
@@ -381,7 +381,7 @@
             width: 100%;
             padding: 8px 12px 8px 32px;
             border-radius: 10px;
-            border: 2px solid var(--border);
+            border: 1.5px solid var(--border);
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             outline: none;
@@ -519,6 +519,166 @@
             transform: translateX(0);
         }
 
+        /* ── CONTRIBUTE & FEEDBACK PAGES ── */
+        .form-page-wrap {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 24px 60px;
+        }
+        .form-page-wrap h1 {
+            font-size: 1.5rem; font-weight: 700; margin: 0 0 6px;
+        }
+        .form-page-subtitle {
+            color: var(--text-light); font-size: 0.9rem; margin: 0 0 28px;
+        }
+
+        /* Tab switcher */
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 28px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 9px 16px;
+            border: none;
+            border-radius: 9px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            background: none;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .tab-btn.active {
+            background: white;
+            color: var(--text-dark);
+            box-shadow: 0 1px 4px rgba(15,23,42,0.08);
+        }
+        .tab-btn:hover:not(.active) { color: var(--text-dark); }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* Form card */
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 28px;
+        }
+        .form-card h2 {
+            font-size: 1.05rem; font-weight: 700;
+            margin: 0 0 4px; color: var(--text-dark);
+        }
+        .form-card .form-desc {
+            font-size: 0.83rem; color: var(--text-light);
+            margin: 0 0 22px; line-height: 1.55;
+        }
+
+        .form-row { margin-bottom: 16px; }
+        .form-label {
+            display: block;
+            font-size: 0.8rem; font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+        .form-label span { color: #ef4444; margin-left: 2px; }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            background: white;
+            outline: none;
+            transition: border-color 0.18s;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--primary); }
+        .form-textarea { resize: vertical; min-height: 100px; line-height: 1.55; }
+
+        .form-check-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.83rem;
+            color: var(--text-mid, #334155);
+            cursor: pointer;
+            line-height: 1.5;
+        }
+        .form-check-label input[type="checkbox"] {
+            accent-color: var(--primary);
+            width: 15px; height: 15px;
+            margin-top: 2px; flex-shrink: 0; cursor: pointer;
+        }
+
+        .form-file-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border: 1.5px dashed var(--border);
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 0.83rem;
+            color: var(--text-light);
+            transition: border-color 0.18s, background 0.18s;
+        }
+        .form-file-label:hover { border-color: var(--primary); background: #f8fafc; color: var(--text-dark); }
+        .form-file-label input[type="file"] { display: none; }
+        #file-name-display { font-size: 0.78rem; color: var(--primary); margin-top: 4px; }
+
+        .form-submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 11px 28px;
+            border-radius: 9px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem; font-weight: 700;
+            cursor: pointer;
+            transition: background 0.18s;
+            margin-top: 6px;
+        }
+        .form-submit-btn:hover { background: var(--primary-hover); }
+        .form-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        /* Feedback type selector */
+        .feedback-type-group {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
+        }
+        .feedback-type-btn {
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem; font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .feedback-type-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .feedback-type-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+
+        /* Status message */
+        .form-status {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: 9px;
+            font-size: 0.85rem; font-weight: 500;
+        }
+        .form-status.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: block; }
+        .form-status.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
             :root { --header-h: 58px; }
@@ -538,7 +698,7 @@
             .hero { padding: 28px 22px; }
             .hero h1 { font-size: 1.5rem; }
             .hero::after { display: none; }
-            .home-wrap, .about-wrap, .search-wrap { padding: 20px 16px 60px; }
+            .home-wrap, .about-wrap, .search-wrap, .form-page-wrap { padding: 20px 16px 60px; }
 
             .game-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .snapshot { height: 130px; }
@@ -570,7 +730,9 @@
     <button class="brand-title" onclick="showPage('home');closeMobileNav()">🎮 AHS Game Library</button>
     <nav class="header-nav">
         <button id="nav-browse" onclick="showPage('browse')">Browse Games</button>
+        <button id="nav-contribute" onclick="showPage('contribute')">Contribute Games</button>
         <button id="nav-about" onclick="showPage('about')">About</button>
+        <button id="nav-feedback" onclick="showPage('feedback')">Feedback</button>
     </nav>
     <!-- Desktop search -->
     <div class="header-search-wrap">
@@ -598,6 +760,8 @@
         <button class="mnav-sub-item" onclick="browseCategory('')">All Games</button>
     </div>
     <button class="mnav-item" id="mnav-about" onclick="showPage('about');closeMobileNav()">About</button>
+    <button class="mnav-item" id="mnav-contribute" onclick="showPage('contribute');closeMobileNav()">Contribute Games</button>
+    <button class="mnav-item" id="mnav-feedback" onclick="showPage('feedback');closeMobileNav()">Feedback</button>
 </div>
 
 <!-- MOBILE FILTER OVERLAY -->
@@ -764,6 +928,123 @@
                 <p>Our goal is to make games more accessible for students with autism — not only as a learning tool, but also as a source of enjoyment, confidence, and independence. Through interactive and motivating activities, we hope to create opportunities for every student to learn, explore, and succeed at their own pace.</p>
                 <p>We also hope to support families by providing simple and meaningful resources that parents and caregivers can easily use at home to practise and reinforce skills together.</p>
                 <p>Above all, AHS Game Library is created with the belief that learning should be accessible, encouraging, and enjoyable for every child.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTRIBUTE GAMES -->
+    <div id="page-contribute" class="page">
+        <div class="form-page-wrap">
+            <h1>Contribute Games</h1>
+            <p class="form-page-subtitle">Help grow the AHS Game Library by sharing your games or ideas.</p>
+
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchContributeTab('submit-game', this)">Submit a Game</button>
+                <button class="tab-btn" onclick="switchContributeTab('suggest-game', this)">Submit a Suggestion</button>
+            </div>
+
+            <!-- Tab: Submit a Game -->
+            <div id="tab-submit-game" class="tab-panel active">
+                <div class="form-card">
+                    <h2>Submit a Game</h2>
+                    <p class="form-desc">Share a game you've created. Please fill in all required fields. Your game will be reviewed before being added to the library.</p>
+
+                    <div class="form-row">
+                        <label class="form-label">Game Title <span>*</span></label>
+                        <input type="text" class="form-input" id="sg-title" placeholder="e.g. Sight Word Snap">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Your Name <span>*</span></label>
+                        <input type="text" class="form-input" id="sg-creator" placeholder="e.g. Ms. Tan">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Your Email <span>*</span></label>
+                        <input type="email" class="form-input" id="sg-email" placeholder="e.g. teacher@rainbowcentre.org.sg">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Description <span>*</span></label>
+                        <textarea class="form-textarea" id="sg-desc" placeholder="Briefly describe what the game is about and how it is played."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Learning Objectives <span>*</span></label>
+                        <textarea class="form-textarea" id="sg-objectives" placeholder="What skills or concepts does this game help students practise?"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Upload HTML Game File <span>*</span></label>
+                        <label class="form-file-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Choose file…
+                            <input type="file" id="sg-file" accept=".html,.htm" onchange="showFileName('sg-file','file-name-display')">
+                        </label>
+                        <div id="file-name-display"></div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-check-label">
+                            <input type="checkbox" id="sg-assets">
+                            This game references external assets (images, audio, fonts) that are not embedded in the HTML file.
+                        </label>
+                    </div>
+                    <button class="form-submit-btn" onclick="submitGame()">Submit Game</button>
+                    <div class="form-status" id="sg-status"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Submit a Suggestion -->
+            <div id="tab-suggest-game" class="tab-panel">
+                <div class="form-card">
+                    <h2>Submit a Game Suggestion</h2>
+                    <p class="form-desc">Have an idea for a game you'd like us to create? Share your game ideas or learning objectives and we'll do our best to bring them to life.</p>
+
+                    <div class="form-row">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" id="ss-name" placeholder="Optional">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Your Email</label>
+                        <input type="email" class="form-input" id="ss-email" placeholder="Optional — so we can follow up with you">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Game Idea or Learning Objective <span>*</span></label>
+                        <textarea class="form-textarea" style="min-height:130px;" id="ss-idea" placeholder="Describe the game idea, the skill you'd like practised, or the learning goal you have in mind. The more detail, the better!"></textarea>
+                    </div>
+                    <button class="form-submit-btn" onclick="submitSuggestion()">Submit Suggestion</button>
+                    <div class="form-status" id="ss-status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div id="page-feedback" class="page">
+        <div class="form-page-wrap">
+            <h1>Feedback</h1>
+            <p class="form-page-subtitle">Found a bug? Have a suggestion? We'd love to hear from you.</p>
+            <div class="form-card">
+                <h2>Share Your Feedback</h2>
+                <p class="form-desc">Select the type of feedback below, write your message, and hit Send. We read every submission.</p>
+
+                <div class="form-row">
+                    <label class="form-label">Feedback Type <span>*</span></label>
+                    <div class="feedback-type-group">
+                        <button class="feedback-type-btn active" onclick="selectFeedbackType(this)">🐞 Bug Report</button>
+                        <button class="feedback-type-btn" onclick="selectFeedbackType(this)">🎨 UI/UX Suggestion</button>
+                        <button class="feedback-type-btn" onclick="selectFeedbackType(this)">💬 General Feedback</button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Your Name</label>
+                    <input type="text" class="form-input" id="fb-name" placeholder="Optional">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Your Email</label>
+                    <input type="email" class="form-input" id="fb-email" placeholder="Optional — so we can follow up">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Your Feedback <span>*</span></label>
+                    <textarea class="form-textarea" style="min-height:130px;" id="fb-message" placeholder="Tell us what you experienced, what you'd like to see improved, or anything else on your mind."></textarea>
+                </div>
+                <button class="form-submit-btn" onclick="submitFeedback()">Send Feedback</button>
+                <div class="form-status" id="fb-status"></div>
             </div>
         </div>
     </div>
@@ -1139,6 +1420,131 @@ function validateAndPlay(id) {
     a.href = new URL(getGameUrl(g), window.location.href).href;
     a.target = '_blank'; a.rel = 'noopener noreferrer';
     document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ── CONTRIBUTE & FEEDBACK ── */
+const MANAGER_EMAIL = 'gameslibrary@rainbowcentre.org.sg'; // ← update this address
+
+function switchContributeTab(tabId, btn) {
+    document.querySelectorAll('#page-contribute .tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#page-contribute .tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    btn.classList.add('active');
+}
+
+function selectFeedbackType(btn) {
+    document.querySelectorAll('.feedback-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+function showFileName(inputId, displayId) {
+    const input = document.getElementById(inputId);
+    const display = document.getElementById(displayId);
+    display.textContent = input.files.length ? '📎 ' + input.files[0].name : '';
+}
+
+function showStatus(id, type, message) {
+    const el = document.getElementById(id);
+    el.className = 'form-status ' + type;
+    el.textContent = message;
+}
+
+function validateRequired(fields) {
+    for (const [id, label] of fields) {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+            el.focus();
+            return `Please fill in: ${label}`;
+        }
+    }
+    return null;
+}
+
+function submitGame() {
+    const err = validateRequired([
+        ['sg-title', 'Game Title'],
+        ['sg-creator', 'Your Name'],
+        ['sg-email', 'Your Email'],
+        ['sg-desc', 'Description'],
+        ['sg-objectives', 'Learning Objectives'],
+    ]);
+    if (err) { showStatus('sg-status', 'error', err); return; }
+    if (!document.getElementById('sg-file').files.length) {
+        showStatus('sg-status', 'error', 'Please upload the HTML game file.'); return;
+    }
+
+    const title       = document.getElementById('sg-title').value.trim();
+    const creator     = document.getElementById('sg-creator').value.trim();
+    const email       = document.getElementById('sg-email').value.trim();
+    const desc        = document.getElementById('sg-desc').value.trim();
+    const objectives  = document.getElementById('sg-objectives').value.trim();
+    const fileName    = document.getElementById('sg-file').files[0].name;
+    const hasAssets   = document.getElementById('sg-assets').checked ? 'Yes' : 'No';
+
+    const subject = encodeURIComponent(`[AHS Game Library] New Game Submission: ${title}`);
+    const body = encodeURIComponent(
+`Game Title: ${title}
+Creator Name: ${creator}
+Creator Email: ${email}
+
+Description:
+${desc}
+
+Learning Objectives:
+${objectives}
+
+HTML File: ${fileName}
+Contains External Assets: ${hasAssets}
+
+---
+Please attach the HTML file to this email before sending.`
+    );
+
+    window.location.href = `mailto:${MANAGER_EMAIL}?subject=${subject}&body=${body}`;
+    showStatus('sg-status', 'success', '✅ Your email client has been opened. Please attach the HTML file and send the email to complete your submission.');
+}
+
+function submitSuggestion() {
+    const idea = document.getElementById('ss-idea').value.trim();
+    if (!idea) { showStatus('ss-status', 'error', 'Please describe your game idea or learning objective.'); return; }
+
+    const name  = document.getElementById('ss-name').value.trim() || 'Anonymous';
+    const email = document.getElementById('ss-email').value.trim();
+
+    const subject = encodeURIComponent('[AHS Game Library] Game Suggestion');
+    const body = encodeURIComponent(
+`Name: ${name}
+${email ? 'Email: ' + email : ''}
+
+Game Idea / Learning Objective:
+${idea}`
+    );
+
+    window.location.href = `mailto:${MANAGER_EMAIL}?subject=${subject}&body=${body}`;
+    showStatus('ss-status', 'success', '✅ Your email client has been opened. Review the message and send to submit your suggestion.');
+}
+
+function submitFeedback() {
+    const message = document.getElementById('fb-message').value.trim();
+    if (!message) { showStatus('fb-status', 'error', 'Please write your feedback before sending.'); return; }
+
+    const typeBtn  = document.querySelector('.feedback-type-btn.active');
+    const type     = typeBtn ? typeBtn.textContent.trim() : 'General Feedback';
+    const name     = document.getElementById('fb-name').value.trim() || 'Anonymous';
+    const email    = document.getElementById('fb-email').value.trim();
+
+    const subject = encodeURIComponent(`[AHS Game Library] ${type}`);
+    const body = encodeURIComponent(
+`Type: ${type}
+From: ${name}
+${email ? 'Email: ' + email : ''}
+
+Feedback:
+${message}`
+    );
+
+    window.location.href = `mailto:${MANAGER_EMAIL}?subject=${subject}&body=${body}`;
+    showStatus('fb-status', 'success', '✅ Your email client has been opened. Review the message and send to submit your feedback.');
 }
 
 init();
