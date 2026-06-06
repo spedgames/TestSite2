@@ -363,6 +363,33 @@
         .qr-code { width: 150px; height: 150px; border-radius: 10px; margin-bottom: 10px; }
         .qr-id { font-size: 0.7rem; color: var(--text-light); }
 
+        /* Mobile search in header */
+        .mobile-search-wrap {
+            display: none;
+            position: relative;
+            flex: 1;
+            min-width: 0;
+        }
+        .mobile-search-icon {
+            position: absolute;
+            left: 10px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            pointer-events: none;
+        }
+        #mobile-search {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            background: white;
+            color: var(--text-dark);
+        }
+        #mobile-search:focus { border-color: var(--primary); }
+
         /* ── HAMBURGER & MOBILE FILTER BTN ── */
         .hamburger {
             display: none;
@@ -464,6 +491,7 @@
             .header-nav { display: none; }
             .header-search-wrap { display: none; }
             .hamburger { display: flex; }
+            .mobile-search-wrap { display: flex; }
 
             .sidebar { display: none; }
             #page-browse.active { display: block; }
@@ -503,9 +531,15 @@
         <button id="nav-browse" onclick="showPage('browse')">Browse Games</button>
         <button id="nav-about" onclick="showPage('about')">About</button>
     </nav>
+    <!-- Desktop search -->
     <div class="header-search-wrap">
         <svg class="header-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="header-search" placeholder="Search games…" autocomplete="off">
+    </div>
+    <!-- Mobile search — always in DOM, shown via CSS -->
+    <div class="mobile-search-wrap">
+        <svg class="mobile-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="mobile-search" placeholder="Search…" autocomplete="off">
     </div>
 </header>
 
@@ -513,10 +547,6 @@
 <div class="mobile-nav-drawer" id="mobile-nav">
     <button id="mnav-browse" onclick="showPage('browse');closeMobileNav()">Browse Games</button>
     <button id="mnav-about" onclick="showPage('about');closeMobileNav()">About</button>
-    <div style="padding:10px 12px 4px;">
-        <input type="text" id="mobile-search" placeholder="Search games…" autocomplete="off"
-            style="width:100%;padding:10px 14px;border-radius:10px;border:2px solid var(--border);font-family:'Poppins',sans-serif;font-size:0.9rem;outline:none;color:var(--text-dark);">
-    </div>
 </div>
 
 <!-- MOBILE FILTER OVERLAY -->
@@ -867,14 +897,10 @@ function syncToMobile(category) {
 }
 
 /* ── MOBILE SEARCH ── */
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('mobile-search').addEventListener('input', function() {
-        const q = this.value.trim();
-        if (!q) return;
-        document.getElementById('header-search').value = q;
-        doSearch(q);
-        // Don't close the drawer — let user keep typing
-    });
+document.getElementById('mobile-search').addEventListener('input', function() {
+    const q = this.value.trim();
+    if (!q) return;
+    doSearch(q);
 });
 
 function doSearch(term) {
