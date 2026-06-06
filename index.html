@@ -364,7 +364,7 @@
         .qr-id { font-size: 0.7rem; color: var(--text-light); }
 
         /* ── HAMBURGER & MOBILE FILTER BTN ── */
-        .hamburger, .mobile-filter-btn {
+        .hamburger {
             display: none;
             background: none;
             border: 1.5px solid var(--border);
@@ -376,7 +376,26 @@
             color: var(--text-dark);
             font-size: 1.1rem;
         }
-        .hamburger:hover, .mobile-filter-btn:hover { background: #f1f5f9; }
+        .hamburger:hover { background: #f1f5f9; }
+
+        .mobile-filter-btn {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 14px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .mobile-filter-btn:hover { background: #f1f5f9; }
+        .mobile-filter-btn svg { flex-shrink: 0; }
 
         /* Mobile nav drawer */
         .mobile-nav-drawer {
@@ -405,65 +424,64 @@
         .mobile-nav-drawer button:hover { background: #f1f5f9; }
         .mobile-nav-drawer button.active { background: var(--primary); color: white; }
 
-        /* Mobile filter drawer (for browse page) */
-        .mobile-filter-drawer {
-            display: none;
+        /* Mobile filter — slide-in from left */
+        .mobile-filter-overlay {
             position: fixed;
-            top: var(--header-h); left: 0; right: 0; bottom: 0;
+            inset: 0;
+            top: var(--header-h);
+            background: rgba(15,23,42,0.4);
+            z-index: 997;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.28s ease;
+        }
+        .mobile-filter-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mobile-filter-drawer {
+            position: fixed;
+            top: var(--header-h); left: 0; bottom: 0;
+            width: 82vw;
+            max-width: 300px;
             background: white;
             z-index: 998;
             overflow-y: auto;
-            padding-bottom: 80px;
+            padding-bottom: 32px;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 24px rgba(15,23,42,0.12);
         }
-        .mobile-filter-drawer.open { display: block; }
-        .mobile-filter-close {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            font-weight: 700;
-            font-size: 1rem;
-        }
-        .mobile-filter-close button {
-            background: var(--primary); color: white;
-            border: none; border-radius: 8px;
-            padding: 8px 18px;
-            font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.875rem;
-            cursor: pointer;
+        .mobile-filter-drawer.open {
+            transform: translateX(0);
         }
 
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
             :root { --header-h: 58px; }
 
-            /* Header: show hamburger, hide desktop nav & search */
             .header-nav { display: none; }
             .header-search-wrap { display: none; }
             .hamburger { display: flex; }
 
-            /* Browse page: hide sticky sidebar, show filter btn */
             .sidebar { display: none; }
             #page-browse.active { display: block; }
             .mobile-filter-btn { display: flex; }
 
-            /* Browse top: stack sort below title */
-            .browse-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .browse-top { flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; }
             .browse-main { padding: 20px 16px 60px; }
 
-            /* Home */
             .hero { padding: 28px 22px; }
             .hero h1 { font-size: 1.5rem; }
             .hero::after { display: none; }
             .home-wrap, .about-wrap, .search-wrap { padding: 20px 16px 60px; }
 
-            /* Grid: 2 columns on mobile */
             .game-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .snapshot { height: 130px; }
             .card-content { padding: 12px; }
             .card-title { font-size: 0.9rem; }
 
-            /* Detail modal: single column */
             .detail-hero { height: 200px; }
             .detail-body { grid-template-columns: 1fr; padding: 20px; gap: 20px; }
             .qr-area { border-left: none; padding-left: 0; border-top: 1px solid #f1f5f9; padding-top: 20px; }
@@ -501,12 +519,12 @@
     </div>
 </div>
 
+<!-- MOBILE FILTER OVERLAY -->
+<div class="mobile-filter-overlay" id="mobile-filter-overlay" onclick="closeMobileFilters()"></div>
+
 <!-- MOBILE FILTER DRAWER -->
 <div class="mobile-filter-drawer" id="mobile-filter-drawer">
-    <div class="mobile-filter-close">
-        <span>Filters</span>
-        <button onclick="closeMobileFilters()">Done</button>
-    </div>
+    <div style="padding:16px 20px 12px;border-bottom:1px solid var(--border);font-weight:700;font-size:1rem;">Filters</div>
     <!-- same filter groups, cloned for mobile -->
     <div class="filter-group">
         <div class="filter-toggle" onclick="toggleFilter('mcat')"><span>Category</span><span class="filter-icon" id="icon-mcat">−</span></div>
@@ -635,8 +653,7 @@
         <div class="browse-main">
             <div class="browse-top">
                 <h1>Browse Games</h1>
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <button class="mobile-filter-btn" id="mobile-filter-btn" onclick="openMobileFilters()">⚙ Filters</button>
+                <div style="display:flex;align-items:center;gap:12px;">
                     <div class="sort-wrap">
                         <span class="sort-label">Sort by:</span>
                         <select id="sort-select" onchange="applyFilters()">
@@ -645,6 +662,10 @@
                             <option value="alpha">A → Z</option>
                         </select>
                     </div>
+                    <button class="mobile-filter-btn" id="mobile-filter-btn" onclick="openMobileFilters()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        Filter
+                    </button>
                 </div>
             </div>
             <div class="result-count" id="browse-count"></div>
@@ -796,18 +817,20 @@ function renderHome() {
 function toggleMobileNav() {
     const drawer = document.getElementById('mobile-nav');
     const isOpen = drawer.classList.toggle('open');
-    if (isOpen) document.getElementById('mobile-filter-drawer').classList.remove('open');
+    if (isOpen) closeMobileFilters();
 }
 function closeMobileNav() {
     document.getElementById('mobile-nav').classList.remove('open');
 }
 
 function openMobileFilters() {
+    closeMobileNav();
     document.getElementById('mobile-filter-drawer').classList.add('open');
-    document.getElementById('mobile-nav').classList.remove('open');
+    document.getElementById('mobile-filter-overlay').classList.add('open');
 }
 function closeMobileFilters() {
     document.getElementById('mobile-filter-drawer').classList.remove('open');
+    document.getElementById('mobile-filter-overlay').classList.remove('open');
 }
 
 /* Sync mobile filters → desktop filters then apply */
@@ -834,7 +857,6 @@ function syncFromMobile() {
 function syncToMobile(category) {
     const mcat = document.querySelector(`input[name="mcat"][value="${category}"]`);
     if (mcat) mcat.checked = true;
-    // rebuild mtopic-options for the category
     const container = document.getElementById('mtopic-options');
     let topics = category && TOPICS[category]
         ? Object.keys(TOPICS[category])
@@ -847,11 +869,11 @@ function syncToMobile(category) {
 /* ── MOBILE SEARCH ── */
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('mobile-search').addEventListener('input', function() {
-        const q = this.value.trim().toLowerCase();
+        const q = this.value.trim();
         if (!q) return;
-        document.getElementById('header-search').value = this.value;
-        doSearch(this.value.trim());
-        closeMobileNav();
+        document.getElementById('header-search').value = q;
+        doSearch(q);
+        // Don't close the drawer — let user keep typing
     });
 });
 
