@@ -1453,10 +1453,14 @@ async function postToFormspree(endpoint, data, statusId, btn) {
     btn.disabled = true;
     btn.textContent = 'Sending…';
     try {
+        const formData = new FormData();
+        for (const [key, value] of Object.entries(data)) {
+            formData.append(key, value);
+        }
         const res = await fetch(endpoint, {
             method: 'POST',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            headers: { 'Accept': 'application/json' },
+            body: formData
         });
         if (res.ok) {
             showStatus(statusId, 'success', '✅ Submitted successfully! Thank you.');
