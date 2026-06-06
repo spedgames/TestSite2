@@ -451,6 +451,42 @@
         .mobile-nav-drawer button:hover { background: #f1f5f9; }
         .mobile-nav-drawer button.active { background: var(--primary); color: white; }
 
+        .mnav-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #mnav-chevron {
+            transition: transform 0.22s ease;
+            flex-shrink: 0;
+        }
+        .mnav-submenu-open #mnav-chevron { transform: rotate(180deg); }
+
+        .mnav-submenu {
+            display: none;
+            flex-direction: column;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin: 2px 0 4px;
+            overflow: hidden;
+        }
+        .mnav-submenu.open { display: flex; }
+
+        .mnav-sub-item {
+            background: none !important;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-mid, #334155) !important;
+            padding: 10px 18px !important;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 0 !important;
+        }
+        .mnav-sub-item:hover { background: #f1f5f9 !important; color: var(--text-dark) !important; }
+
         /* Mobile filter — slide-in from left */
         .mobile-filter-overlay {
             position: fixed;
@@ -545,8 +581,18 @@
 
 <!-- MOBILE NAV DRAWER -->
 <div class="mobile-nav-drawer" id="mobile-nav">
-    <button id="mnav-browse" onclick="showPage('browse');closeMobileNav()">Browse Games</button>
-    <button id="mnav-about" onclick="showPage('about');closeMobileNav()">About</button>
+    <button class="mnav-item" id="mnav-browse" onclick="toggleMnavSubmenu()">
+        Browse Games
+        <svg id="mnav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="mnav-submenu" id="mnav-submenu">
+        <button class="mnav-sub-item" onclick="browseCategory('Literacy')">📚 Literacy Games</button>
+        <button class="mnav-sub-item" onclick="browseCategory('Numeracy')">🔢 Numeracy Games</button>
+        <button class="mnav-sub-item" onclick="browseCategory('SEL')">💛 SEL Games</button>
+        <button class="mnav-sub-item" onclick="browseCategory('Daily Living')">🏠 Daily Living Games</button>
+        <button class="mnav-sub-item" onclick="browseCategory('')">All Games</button>
+    </div>
+    <button class="mnav-item" id="mnav-about" onclick="showPage('about');closeMobileNav()">About</button>
 </div>
 
 <!-- MOBILE FILTER OVERLAY -->
@@ -848,6 +894,32 @@ function toggleMobileNav() {
     const drawer = document.getElementById('mobile-nav');
     const isOpen = drawer.classList.toggle('open');
     if (isOpen) closeMobileFilters();
+    // reset submenu when closing the whole nav
+    if (!isOpen) {
+        document.getElementById('mnav-submenu').classList.remove('open');
+        document.getElementById('mnav-browse').classList.remove('mnav-submenu-open');
+    }
+}
+
+function toggleMnavSubmenu() {
+    const submenu = document.getElementById('mnav-submenu');
+    const btn = document.getElementById('mnav-browse');
+    const isOpen = submenu.classList.toggle('open');
+    btn.classList.toggle('mnav-submenu-open', isOpen);
+}
+
+function browseCategory(category) {
+    clearFilters();
+    if (category) {
+        // Set the desktop sidebar radio
+        const radio = document.querySelector(`input[name="cat"][value="${category}"]`);
+        if (radio) radio.checked = true;
+        // Set the mobile filter radio
+        const mradio = document.querySelector(`input[name="mcat"][value="${category}"]`);
+        if (mradio) mradio.checked = true;
+    }
+    showPage('browse');
+    applyFilters();
 }
 function closeMobileNav() {
     document.getElementById('mobile-nav').classList.remove('open');
