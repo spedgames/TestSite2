@@ -46,7 +46,7 @@
         }
 
         .brand-title {
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--text-dark);
             cursor: pointer;
@@ -363,21 +363,115 @@
         .qr-code { width: 150px; height: 150px; border-radius: 10px; margin-bottom: 10px; }
         .qr-id { font-size: 0.7rem; color: var(--text-light); }
 
+        /* ── HAMBURGER & MOBILE FILTER BTN ── */
+        .hamburger, .mobile-filter-btn {
+            display: none;
+            background: none;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            width: 38px; height: 38px;
+            align-items: center; justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+        .hamburger:hover, .mobile-filter-btn:hover { background: #f1f5f9; }
+
+        /* Mobile nav drawer */
+        .mobile-nav-drawer {
+            display: none;
+            position: fixed;
+            top: var(--header-h); left: 0; right: 0;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px 16px;
+            z-index: 999;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 8px 16px -4px rgba(15,23,42,0.1);
+        }
+        .mobile-nav-drawer.open { display: flex; }
+        .mobile-nav-drawer button {
+            background: none; border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem; font-weight: 500;
+            color: var(--text-dark);
+            padding: 10px 12px;
+            border-radius: 8px;
+            text-align: left; cursor: pointer;
+            width: 100%;
+        }
+        .mobile-nav-drawer button:hover { background: #f1f5f9; }
+        .mobile-nav-drawer button.active { background: var(--primary); color: white; }
+
+        /* Mobile filter drawer (for browse page) */
+        .mobile-filter-drawer {
+            display: none;
+            position: fixed;
+            top: var(--header-h); left: 0; right: 0; bottom: 0;
+            background: white;
+            z-index: 998;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+        .mobile-filter-drawer.open { display: block; }
+        .mobile-filter-close {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .mobile-filter-close button {
+            background: var(--primary); color: white;
+            border: none; border-radius: 8px;
+            padding: 8px 18px;
+            font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.875rem;
+            cursor: pointer;
+        }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
+            :root { --header-h: 58px; }
+
+            /* Header: show hamburger, hide desktop nav & search */
+            .header-nav { display: none; }
+            .header-search-wrap { display: none; }
+            .hamburger { display: flex; }
+
+            /* Browse page: hide sticky sidebar, show filter btn */
             .sidebar { display: none; }
+            #page-browse.active { display: block; }
+            .mobile-filter-btn { display: flex; }
+
+            /* Browse top: stack sort below title */
+            .browse-top { flex-direction: column; align-items: flex-start; gap: 10px; }
             .browse-main { padding: 20px 16px 60px; }
-            .hero { padding: 32px 24px; }
+
+            /* Home */
+            .hero { padding: 28px 22px; }
+            .hero h1 { font-size: 1.5rem; }
             .hero::after { display: none; }
-            .home-wrap, .about-wrap, .search-wrap { padding: 24px 16px 60px; }
-            #header-search { width: 140px; }
-            #header-search:focus { width: 190px; }
-        }
-        @media (max-width: 500px) {
-            .brand-title { font-size: 0.95rem; }
-            .detail-body { grid-template-columns: 1fr; }
+            .home-wrap, .about-wrap, .search-wrap { padding: 20px 16px 60px; }
+
+            /* Grid: 2 columns on mobile */
+            .game-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .snapshot { height: 130px; }
+            .card-content { padding: 12px; }
+            .card-title { font-size: 0.9rem; }
+
+            /* Detail modal: single column */
+            .detail-hero { height: 200px; }
+            .detail-body { grid-template-columns: 1fr; padding: 20px; gap: 20px; }
             .qr-area { border-left: none; padding-left: 0; border-top: 1px solid #f1f5f9; padding-top: 20px; }
-            .game-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        }
+
+        @media (max-width: 400px) {
+            .brand-title { font-size: 1.05rem; }
+            .game-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
         }
     </style>
 </head>
@@ -385,7 +479,8 @@
 
 <!-- HEADER -->
 <header>
-    <button class="brand-title" onclick="showPage('home')">🎮 AHS Game Library</button>
+    <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
+    <button class="brand-title" onclick="showPage('home');closeMobileNav()">🎮 AHS Game Library</button>
     <nav class="header-nav">
         <button id="nav-browse" onclick="showPage('browse')">Browse Games</button>
         <button id="nav-about" onclick="showPage('about')">About</button>
@@ -395,6 +490,60 @@
         <input type="text" id="header-search" placeholder="Search games…" autocomplete="off">
     </div>
 </header>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-nav-drawer" id="mobile-nav">
+    <button id="mnav-browse" onclick="showPage('browse');closeMobileNav()">Browse Games</button>
+    <button id="mnav-about" onclick="showPage('about');closeMobileNav()">About</button>
+    <div style="padding:10px 12px 4px;">
+        <input type="text" id="mobile-search" placeholder="Search games…" autocomplete="off"
+            style="width:100%;padding:10px 14px;border-radius:10px;border:2px solid var(--border);font-family:'Poppins',sans-serif;font-size:0.9rem;outline:none;color:var(--text-dark);">
+    </div>
+</div>
+
+<!-- MOBILE FILTER DRAWER -->
+<div class="mobile-filter-drawer" id="mobile-filter-drawer">
+    <div class="mobile-filter-close">
+        <span>Filters</span>
+        <button onclick="closeMobileFilters()">Done</button>
+    </div>
+    <!-- same filter groups, cloned for mobile -->
+    <div class="filter-group">
+        <div class="filter-toggle" onclick="toggleFilter('mcat')"><span>Category</span><span class="filter-icon" id="icon-mcat">−</span></div>
+        <div class="filter-body" id="body-mcat">
+            <label class="filter-option"><input type="radio" name="mcat" value="" checked onchange="syncFromMobile()"> All</label>
+            <label class="filter-option"><input type="radio" name="mcat" value="Literacy" onchange="syncFromMobile()"> Literacy</label>
+            <label class="filter-option"><input type="radio" name="mcat" value="Numeracy" onchange="syncFromMobile()"> Numeracy</label>
+            <label class="filter-option"><input type="radio" name="mcat" value="SEL" onchange="syncFromMobile()"> SEL</label>
+            <label class="filter-option"><input type="radio" name="mcat" value="Daily Living" onchange="syncFromMobile()"> Daily Living</label>
+            <label class="filter-option"><input type="radio" name="mcat" value="General" onchange="syncFromMobile()"> General</label>
+        </div>
+    </div>
+    <div class="filter-group">
+        <div class="filter-toggle" onclick="toggleFilter('mtopic')"><span>Topics</span><span class="filter-icon" id="icon-mtopic">+</span></div>
+        <div class="filter-body collapsed" id="body-mtopic"><div id="mtopic-options"></div></div>
+    </div>
+    <div class="filter-group">
+        <div class="filter-toggle" onclick="toggleFilter('mdevice')"><span>Device Compatibility</span><span class="filter-icon" id="icon-mdevice">+</span></div>
+        <div class="filter-body collapsed" id="body-mdevice">
+            <label class="filter-option"><input type="checkbox" name="mdevice" value="desktop" onchange="syncFromMobile()"> Desktop</label>
+            <label class="filter-option"><input type="checkbox" name="mdevice" value="tablet" onchange="syncFromMobile()"> Tablet</label>
+            <label class="filter-option"><input type="checkbox" name="mdevice" value="mobile" onchange="syncFromMobile()"> Mobile</label>
+        </div>
+    </div>
+    <div class="filter-group">
+        <div class="filter-toggle" onclick="toggleFilter('mdate')"><span>Upload Date</span><span class="filter-icon" id="icon-mdate">+</span></div>
+        <div class="filter-body collapsed" id="body-mdate">
+            <div class="filter-date-inputs">
+                <label>From <input type="date" id="mdate-from" onchange="syncFromMobile()"></label>
+                <label>To <input type="date" id="mdate-to" onchange="syncFromMobile()"></label>
+            </div>
+        </div>
+    </div>
+    <div style="padding:16px 20px;">
+        <button class="sidebar-clear-btn" style="width:100%;margin:0;" onclick="clearFilters()">Clear Filters</button>
+    </div>
+</div>
 
 <div class="page-shell">
 
@@ -486,13 +635,16 @@
         <div class="browse-main">
             <div class="browse-top">
                 <h1>Browse Games</h1>
-                <div class="sort-wrap">
-                    <span class="sort-label">Sort by:</span>
-                    <select id="sort-select" onchange="applyFilters()">
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="alpha">A → Z</option>
-                    </select>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <button class="mobile-filter-btn" id="mobile-filter-btn" onclick="openMobileFilters()">⚙ Filters</button>
+                    <div class="sort-wrap">
+                        <span class="sort-label">Sort by:</span>
+                        <select id="sort-select" onchange="applyFilters()">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="alpha">A → Z</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="result-count" id="browse-count"></div>
@@ -589,6 +741,7 @@ async function init() {
     } catch(e) { console.error('Could not load games.json'); }
     renderHome();
     populateTopicOptions(null);
+    syncToMobile('');
     applyFilters();
 }
 
@@ -599,6 +752,12 @@ function showPage(name) {
     document.querySelectorAll('.header-nav button').forEach(b => b.classList.remove('active'));
     const nb = document.getElementById('nav-' + name);
     if (nb) nb.classList.add('active');
+    // also highlight mobile nav buttons
+    document.querySelectorAll('.mobile-nav-drawer button').forEach(b => b.classList.remove('active'));
+    const mnb = document.getElementById('mnav-' + name);
+    if (mnb) mnb.classList.add('active');
+    closeMobileNav();
+    closeMobileFilters();
     window.scrollTo(0, 0);
 }
 
@@ -616,9 +775,16 @@ function showBrowseRecent() {
 
 /* ── HOME ── */
 function renderHome() {
-    // Featured: one per category, newest
-    const seen = {};
-    const featured = allGames.filter(g => { if (!seen[g.category]) { seen[g.category] = true; return true; } return false; }).slice(0, HOME_FEATURED_COUNT);
+    // Featured: games that have "featured" in their tags
+    const featured = allGames
+        .filter(g => (g.tags || []).map(t => t.toLowerCase()).includes('featured'))
+        .slice(0, HOME_FEATURED_COUNT);
+    // Fallback: if no featured tags exist, show newest spread across categories
+    if (featured.length === 0) {
+        const seen = {};
+        allGames.forEach(g => { if (!seen[g.category]) { seen[g.category] = true; featured.push(g); } });
+        featured.splice(HOME_FEATURED_COUNT);
+    }
     renderGrid('home-featured', featured);
 
     // Recent
@@ -626,7 +792,84 @@ function renderHome() {
     renderGrid('home-recent', recent.length ? recent : allGames.slice(0, HOME_RECENT_COUNT));
 }
 
-/* ── FILTER TOGGLE ── */
+/* ── MOBILE NAV ── */
+function toggleMobileNav() {
+    const drawer = document.getElementById('mobile-nav');
+    const isOpen = drawer.classList.toggle('open');
+    if (isOpen) document.getElementById('mobile-filter-drawer').classList.remove('open');
+}
+function closeMobileNav() {
+    document.getElementById('mobile-nav').classList.remove('open');
+}
+
+function openMobileFilters() {
+    document.getElementById('mobile-filter-drawer').classList.add('open');
+    document.getElementById('mobile-nav').classList.remove('open');
+}
+function closeMobileFilters() {
+    document.getElementById('mobile-filter-drawer').classList.remove('open');
+}
+
+/* Sync mobile filters → desktop filters then apply */
+function syncFromMobile() {
+    const mcat = document.querySelector('input[name="mcat"]:checked')?.value || '';
+    const desktopRadio = document.querySelector(`input[name="cat"][value="${mcat}"]`);
+    if (desktopRadio) desktopRadio.checked = true;
+
+    ['desktop','tablet','mobile'].forEach(d => {
+        const mob = document.querySelector(`input[name="mdevice"][value="${d}"]`);
+        const desk = document.querySelector(`#body-device input[value="${d}"]`);
+        if (mob && desk) desk.checked = mob.checked;
+    });
+
+    const mfrom = document.getElementById('mdate-from').value;
+    const mto   = document.getElementById('mdate-to').value;
+    document.getElementById('date-from').value = mfrom;
+    document.getElementById('date-to').value   = mto;
+
+    applyFilters();
+}
+
+/* Keep mobile filter UI in sync when desktop filters change */
+function syncToMobile(category) {
+    const mcat = document.querySelector(`input[name="mcat"][value="${category}"]`);
+    if (mcat) mcat.checked = true;
+    // rebuild mtopic-options for the category
+    const container = document.getElementById('mtopic-options');
+    let topics = category && TOPICS[category]
+        ? Object.keys(TOPICS[category])
+        : [...new Set(Object.values(TOPICS).flatMap(t => Object.keys(t)))].sort();
+    container.innerHTML = topics.map(t =>
+        `<label class="filter-option"><input type="checkbox" value="${t}" onchange="syncFromMobile()"> ${t}</label>`
+    ).join('');
+}
+
+/* ── MOBILE SEARCH ── */
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('mobile-search').addEventListener('input', function() {
+        const q = this.value.trim().toLowerCase();
+        if (!q) return;
+        document.getElementById('header-search').value = this.value;
+        doSearch(this.value.trim());
+        closeMobileNav();
+    });
+});
+
+function doSearch(term) {
+    const q = term.toLowerCase();
+    const results = allGames.filter(g =>
+        (g.title || '').toLowerCase().includes(q) ||
+        (g.description || '').toLowerCase().includes(q) ||
+        (g.category || '').toLowerCase().includes(q) ||
+        (g.creatorName || '').toLowerCase().includes(q) ||
+        (g.tags || []).some(t => t.toLowerCase().includes(q)) ||
+        (g.compatibility || []).some(c => c.toLowerCase().includes(q))
+    );
+    document.getElementById('search-heading').textContent = `Results for "${term}"`;
+    document.getElementById('search-count').textContent = `${results.length} game${results.length !== 1 ? 's' : ''}`;
+    renderGrid('search-grid', results);
+    showPage('search');
+}
 function toggleFilter(key) {
     const body = document.getElementById('body-' + key);
     const icon = document.getElementById('icon-' + key);
@@ -657,6 +900,7 @@ function applyFilters() {
 
     // Rebuild topic options for selected category, preserving selections
     populateTopicOptions(category || null);
+    syncToMobile(category);
     checkedTopics.forEach(t => {
         const el = document.querySelector(`#body-topic input[value="${CSS.escape(t)}"]`);
         if (el) el.checked = true;
@@ -681,30 +925,24 @@ function applyFilters() {
 
 function clearFilters() {
     document.querySelectorAll('input[name="cat"]')[0].checked = true;
+    document.querySelectorAll('input[name="mcat"]')[0].checked = true;
     document.querySelectorAll('#body-topic input, #body-device input').forEach(i => i.checked = false);
+    document.querySelectorAll('input[name="mdevice"]').forEach(i => i.checked = false);
     document.getElementById('date-from').value = '';
     document.getElementById('date-to').value   = '';
+    document.getElementById('mdate-from').value = '';
+    document.getElementById('mdate-to').value   = '';
     document.getElementById('sort-select').value = 'newest';
     populateTopicOptions(null);
+    syncToMobile('');
     applyFilters();
 }
 
 /* ── SEARCH ── */
 document.getElementById('header-search').addEventListener('input', function() {
-    const q = this.value.trim().toLowerCase();
+    const q = this.value.trim();
     if (!q) return;
-    const results = allGames.filter(g =>
-        (g.title || '').toLowerCase().includes(q) ||
-        (g.description || '').toLowerCase().includes(q) ||
-        (g.category || '').toLowerCase().includes(q) ||
-        (g.creatorName || '').toLowerCase().includes(q) ||
-        (g.tags || []).some(t => t.toLowerCase().includes(q)) ||
-        (g.compatibility || []).some(c => c.toLowerCase().includes(q))
-    );
-    document.getElementById('search-heading').textContent = `Results for "${this.value.trim()}"`;
-    document.getElementById('search-count').textContent = `${results.length} game${results.length !== 1 ? 's' : ''}`;
-    renderGrid('search-grid', results);
-    showPage('search');
+    doSearch(q);
 });
 
 /* ── RENDER ── */
