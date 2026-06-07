@@ -1519,11 +1519,15 @@ function validateAndPlay(id) {
     const isTablet = (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1) || /iPad/i.test(ua);
     const device = isTablet ? 'tablet' : (/Mobile/i.test(ua) ? 'mobile' : 'desktop');
     const ok = !g.compatibility || g.compatibility.includes(device);
-    if (!ok && !confirm(`This game is optimised for ${g.compatibility.join('/')}. Open anyway?`)) return;
+    if (!ok && !confirm(`This game is optimised for ${g.compatibility.join('/')} and may not work well on your device. Open anyway?`)) return;
+
     const a = document.createElement('a');
     a.href = new URL(getGameUrl(g), window.location.href).href;
-    a.target = '_blank'; a.rel = 'noopener noreferrer';
-    document.body.appendChild(a); a.click(); a.remove();
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 }
 
 /* ── CONTRIBUTE & FEEDBACK ── */
