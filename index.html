@@ -282,13 +282,72 @@
         .result-count { font-size: 0.82rem; color: var(--text-light); margin-bottom: 16px; }
 
         /* ── ABOUT PAGE ── */
-        .about-wrap { max-width: 800px; margin: 0 auto; padding: 40px 24px 60px; }
-        .about-card {
-            background: white; padding: 40px; border-radius: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); line-height: 1.8;
+        .about-wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 60px; }
+        .about-wrap h1 { font-size: 1.5rem; font-weight: 700; margin: 0 0 28px; }
+
+        .about-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 20px;
         }
-        .about-card h2 { color: var(--primary); margin-top: 0; }
-        .about-card p { color: var(--text-light); }
+        .about-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .about-section-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: var(--primary-light, #eff6ff);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .about-section-header h2 {
+            font-size: 1.1rem; font-weight: 700;
+            margin: 0; color: var(--text-dark);
+        }
+        .about-section p {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin: 0 0 14px;
+        }
+        .about-section p:last-child { margin-bottom: 0; }
+
+        /* Guidelines grid */
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-top: 4px;
+        }
+        .guideline-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+        }
+        .guideline-card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0 0 6px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .guideline-card p {
+            font-size: 0.8rem !important;
+            color: var(--text-light);
+            margin: 0 !important;
+            line-height: 1.6 !important;
+        }
 
         /* ── SEARCH PAGE ── */
         .search-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 24px 60px; }
@@ -946,11 +1005,40 @@
     <!-- ABOUT -->
     <div id="page-about" class="page">
         <div class="about-wrap">
-            <div class="about-card">
-                <h2>Welcome to AHS Game Library!</h2>
-                <p>AHS Game Library is a collection of educational games created by teachers from Rainbow Centre Admiral Hill School. These resources support learning across four key domains: Literacy, Numeracy, Social Emotional Learning, and Daily Living. </p>
-                <p>Our goal is to make games accessible for students with different abilities, and provide a platform for them to learn, explore, and succeed at their own pace. </p>
+            <h1>About</h1>
+
+            <!-- Section 1: Welcome -->
+            <div class="about-section">
+                <div class="about-section-header">
+                    <div class="about-section-icon">🎮</div>
+                    <h2>Welcome to AHS Game Library!</h2>
+                </div>
+                <p>AHS Game Library is a collection of educational games created by teachers from Rainbow Centre Admiral Hill School. These resources support learning across four key domains: Literacy, Numeracy, Social Emotional Learning, and Daily Living.</p>
+                <p>Our goal is to make games accessible for students with different abilities, and provide a platform for them to learn, explore, and succeed at their own pace.</p>
                 <p>We also hope to support families by providing resources that parents and caregivers can easily use at home to practise and reinforce important skills.</p>
+            </div>
+
+            <!-- Section 2: Game Design Guidelines -->
+            <div class="about-section">
+                <div class="about-section-header">
+                    <div class="about-section-icon">📐</div>
+                    <h2>Game Design Guidelines</h2>
+                </div>
+                <p>Games in the AHS Game Library are designed with students with autism in mind. The following principles are used to guide our design process toward creating accessible, engaging, and effective learning tools.</p>
+                <div class="guidelines-grid">
+                    <div class="guideline-card">
+                        <div class="guideline-card-title">🗂️ Structure</div>
+                        <p>Students with autism thrive with predictability. A well-structured game removes uncertainty — students always know what to do, how much is left, and when they're done. This clarity reduces anxiety and keeps students focused on learning rather than figuring out what's expected of them.</p>
+                    </div>
+                    <div class="guideline-card">
+                        <div class="guideline-card-title">🎨 Sensory Management</div>
+                        <p>Sensory overload can quickly derail a learning experience. Calm visuals, gentle audio, a pressure-free pace, and the flexibility to control these settings create an environment where students feel safe and comfortable — making it far easier for them to engage, concentrate, and enjoy the game.</p>
+                    </div>
+                    <div class="guideline-card">
+                        <div class="guideline-card-title">♿ Accessibility & Differentiation</div>
+                        <p>No two students are the same. Games should meet students where they are — supporting different abilities, preferences and learning paces. When a game is designed for every student, every student gets a genuine chance to succeed.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -978,7 +1066,7 @@
                     </div>
                     <div class="form-row">
                         <label class="form-label">Your Name <span>*</span></label>
-                        <input type="text" class="form-input" id="sg-creator" placeholder="e.g. Ms. Tan">
+                        <input type="text" class="form-input" id="sg-creator" placeholder="e.g. John Tan">
                     </div>
                     <div class="form-row">
                         <label class="form-label">Your Email <span>*</span></label>
@@ -996,7 +1084,7 @@
                     <div class="form-row">
                         <label class="form-label">Link to Game File <span>*</span></label>
                         <input type="url" class="form-input" id="sg-file-link" placeholder="e.g. https://drive.google.com/… or https://codepen.io/…">
-                        <p style="font-size:0.78rem;color:var(--text-light);margin:5px 0 0;line-height:1.5;">Share a link to your HTML file. We recommend uploading to <a href="https://drive.google.com" target="_blank" style="color:var(--primary);">Google Drive</a> (set sharing to "Anyone with the link") or hosting on <a href="https://codepen.io" target="_blank" style="color:var(--primary);">CodePen</a>.</p>
+                        <p style="font-size:0.78rem;color:var(--text-light);margin:5px 0 0;line-height:1.5;">Share a Google Drive or Codepen link to your HTML file. If the game contains assets, do also share a link to a folder with these assets.</p>
                     </div>
                     <button class="form-submit-btn" data-label="Submit Game" onclick="submitGame()">Submit Game</button>
                     <div class="form-status" id="sg-status"></div>
