@@ -176,7 +176,7 @@
     "uploadDate": "2026-05-28"
   },
   {
-    "id": "scoop-shop-2",
+    "id": "scoop-shop",
     "title": "Scoop Shop",
     "description": "Buy scoops of ice cream and practice reading prices with dollar and cent symbols.",
     "creatorName": "Teacher Carmina",
@@ -184,8 +184,6 @@
     "compatibility": ["desktop", "tablet", "mobile"],
     "tags": ["money", "purchasing"],
     "uploadDate": "2026-05-18",
-    "url": "https://spedgames.github.io/AHSGameLibrary/Numeracy/scoop-shop/",
-    "thumbnail": "https://spedgames.github.io/AHSGameLibrary/Numeracy/scoop-shop/preview.png"
   },
   {
     "id": "week-letter-sounds",
