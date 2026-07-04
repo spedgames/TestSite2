@@ -5,26 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Play Game</title>
     <style>
-        /* Force the browser window and iframe to be locked at exactly 100% viewport dimensions */
         html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #000;
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; background: #000;
         }
         iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
+            width: 100%; height: 100%; border: none; display: block;
         }
     </style>
 </head>
 <body>
 
-    <iframe src="game.html"></iframe>
+    <iframe id="game-runner" src="game.html"></iframe>
 
+    <script>
+        const iframe = document.getElementById('game-runner');
+
+        iframe.addEventListener('load', () => {
+            // Wait 250ms for mobile Chrome navigation elements to settle down
+            setTimeout(() => {
+                try {
+                    // Forcefully trigger a resize layout recalculation inside the game window
+                    if (iframe.contentWindow) {
+                        iframe.contentWindow.dispatchEvent(new Event('resize'));
+                    }
+                } catch (e) {
+                    console.log("Cross-origin boundary protection blocked resize event dispatch.");
+                }
+            }, 250);
+        });
+    </script>
 </body>
 </html>
