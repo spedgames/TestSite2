@@ -1,46 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <script>
-    // Check if the game is currently being viewed as the main page (not inside an iframe)
-    if (window.self === window.top) {
-        window.addEventListener('DOMContentLoaded', () => {
-            // 1. Capture the entire original HTML content of the game
-            const originalContent = document.documentElement.innerHTML;
-            
-            // 2. Clear the body and hide scrollbars
-            document.body.innerHTML = '';
-            document.documentElement.style.margin = '0';
-            document.documentElement.style.padding = '0';
-            document.documentElement.style.width = '100%';
-            document.documentElement.style.height = '100%';
-            document.documentElement.style.overflow = 'hidden';
-            
-            document.body.style.margin = '0';
-            document.body.style.padding = '0';
-            document.body.style.width = '100%';
-            document.body.style.height = '100%';
-            document.body.style.overflow = 'hidden';
-            document.body.style.background = '#000';
-
-            // 3. Create a full-screen iframe
-            const iframe = document.createElement('iframe');
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.border = 'none';
-            iframe.style.display = 'block';
-            
-            // 4. Append the iframe to the document body
-            document.body.appendChild(iframe);
-            
-            // 5. Inject the original game content directly inside the iframe
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            iframeDoc.open();
-            iframeDoc.write('<!DOCTYPE html><html>' + originalContent + '</html>');
-            iframeDoc.close();
-        });
-    }
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>Trace & Learn – Shapes and Lines!</title>
