@@ -1521,8 +1521,13 @@ function validateAndPlay(id) {
     const ok = !g.compatibility || g.compatibility.includes(device);
     if (!ok && !confirm(`This game is optimised for ${g.compatibility.join('/')} and may not work well on your device. Open anyway?`)) return;
 
-    // Open the game directly in the same tab instead of launching a new window
-    window.location.href = new URL(getGameUrl(g), window.location.href).href;
+    const a = document.createElement('a');
+    a.href = new URL(getGameUrl(g), window.location.href).href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 }
 
 /* ── CONTRIBUTE & FEEDBACK ── */
